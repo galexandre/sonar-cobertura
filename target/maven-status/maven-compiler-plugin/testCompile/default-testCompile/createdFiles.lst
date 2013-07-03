@@ -1,0 +1,6 @@
+org/sonar/plugins/cobertura/CoberturaMavenInitializerTest.class
+org/sonar/plugins/cobertura/CoberturaSensorTest.class
+org/sonar/plugins/cobertura/CoberturaMavenPluginHandlerTest.class
+org/sonar/plugins/cobertura/CoberturaPluginTest.class
+org/sonar/plugins/cobertura/CoberturaSettingsTest.class
+org/sonar/plugins/cobertura/api/CoberturaUtilsTest.class
