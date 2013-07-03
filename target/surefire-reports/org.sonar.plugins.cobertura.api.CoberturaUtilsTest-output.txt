@@ -1,1 +1,1 @@
-09:22:19.468 WARN  org.sonar.INFO - Cobertura report not found at coverage.xml
+09:10:45.311 WARN  org.sonar.INFO - Cobertura report not found at coverage.xml

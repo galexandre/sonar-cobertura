@@ -1,14 +1,14 @@
-09:22:19.580 INFO  o.s.p.cobertura.CoberturaSensor - parsing /Users/eric/Projects/SonarSource/github/sonar-java/sonar-cobertura-plugin/target/test-classes/org/sonar/plugins/cobertura/CoberturaSensorTest/commons-chain-coverage.xml
-09:22:19.851 INFO  o.s.p.cobertura.CoberturaSensor - parsing /Users/eric/Projects/SonarSource/github/sonar-java/sonar-cobertura-plugin/target/test-classes/org/sonar/plugins/cobertura/CoberturaSensorTest/commons-chain-coverage.xml
-09:22:20.060 INFO  o.s.p.cobertura.CoberturaSensor - parsing /Users/eric/Projects/SonarSource/github/sonar-java/sonar-cobertura-plugin/target/test-classes/org/sonar/plugins/cobertura/CoberturaSensorTest/commons-chain-coverage.xml
-09:22:20.144 INFO  o.s.p.cobertura.CoberturaSensor - parsing /Users/eric/Projects/SonarSource/github/sonar-java/sonar-cobertura-plugin/target/test-classes/org/sonar/plugins/cobertura/CoberturaSensorTest/commons-chain-coverage.xml
-09:22:20.186 INFO  o.s.p.cobertura.CoberturaSensor - parsing /Users/eric/Projects/SonarSource/github/sonar-java/sonar-cobertura-plugin/target/test-classes/org/sonar/plugins/cobertura/CoberturaSensorTest/commons-chain-coverage.xml
-09:22:20.233 INFO  o.s.p.cobertura.CoberturaSensor - parsing /Users/eric/Projects/SonarSource/github/sonar-java/sonar-cobertura-plugin/target/test-classes/org/sonar/plugins/cobertura/CoberturaSensorTest/shouldInsertCoverageAtFileLevel/coverage.xml
-09:22:20.238 INFO  o.s.p.cobertura.CoberturaSensor - parsing /Users/eric/Projects/SonarSource/github/sonar-java/sonar-cobertura-plugin/target/test-classes/org/sonar/plugins/cobertura/CoberturaSensorTest/commons-chain-coverage.xml
-09:22:20.291 INFO  o.s.p.cobertura.CoberturaSensor - parsing /Users/eric/Projects/SonarSource/github/sonar-java/sonar-cobertura-plugin/target/test-classes/org/sonar/plugins/cobertura/CoberturaSensorTest/shouldNotCountTwiceAnonymousClasses.xml
-09:22:20.294 WARN  o.s.p.cobertura.CoberturaSensor - Cobertura report not found at notFound.xml
-09:22:20.295 INFO  o.s.p.cobertura.CoberturaSensor - parsing /Users/eric/Projects/SonarSource/github/sonar-java/sonar-cobertura-plugin/target/test-classes/org/sonar/plugins/cobertura/CoberturaSensorTest/commons-chain-coverage.xml
-09:22:20.313 INFO  o.s.p.cobertura.CoberturaSensor - parsing /Users/eric/Projects/SonarSource/github/sonar-java/sonar-cobertura-plugin/target/test-classes/org/sonar/plugins/cobertura/CoberturaSensorTest/commons-chain-coverage.xml
-09:22:20.331 INFO  o.s.p.cobertura.CoberturaSensor - parsing /Users/eric/Projects/SonarSource/github/sonar-java/sonar-cobertura-plugin/target/test-classes/org/sonar/plugins/cobertura/CoberturaSensorTest/commons-chain-coverage.xml
-09:22:20.349 INFO  o.s.p.cobertura.CoberturaSensor - parsing /Users/eric/Projects/SonarSource/github/sonar-java/sonar-cobertura-plugin/target/test-classes/org/sonar/plugins/cobertura/CoberturaSensorTest/commons-chain-coverage.xml
-09:22:20.366 INFO  o.s.p.cobertura.CoberturaSensor - parsing /Users/eric/Projects/SonarSource/github/sonar-java/sonar-cobertura-plugin/target/test-classes/org/sonar/plugins/cobertura/CoberturaSensorTest/commons-chain-coverage.xml
+09:10:44.372 INFO  o.s.p.cobertura.CoberturaSensor - parsing /Users/eric/Tmp/sonar-cobertura/target/test-classes/org/sonar/plugins/cobertura/CoberturaSensorTest/commons-chain-coverage.xml
+09:10:44.680 INFO  o.s.p.cobertura.CoberturaSensor - parsing /Users/eric/Tmp/sonar-cobertura/target/test-classes/org/sonar/plugins/cobertura/CoberturaSensorTest/commons-chain-coverage.xml
+09:10:44.842 INFO  o.s.p.cobertura.CoberturaSensor - parsing /Users/eric/Tmp/sonar-cobertura/target/test-classes/org/sonar/plugins/cobertura/CoberturaSensorTest/shouldInsertCoverageAtFileLevel/coverage.xml
+09:10:44.866 INFO  o.s.p.cobertura.CoberturaSensor - parsing /Users/eric/Tmp/sonar-cobertura/target/test-classes/org/sonar/plugins/cobertura/CoberturaSensorTest/commons-chain-coverage.xml
+09:10:44.969 INFO  o.s.p.cobertura.CoberturaSensor - parsing /Users/eric/Tmp/sonar-cobertura/target/test-classes/org/sonar/plugins/cobertura/CoberturaSensorTest/shouldNotCountTwiceAnonymousClasses.xml
+09:10:44.979 WARN  o.s.p.cobertura.CoberturaSensor - Cobertura report not found at notFound.xml
+09:10:44.980 INFO  o.s.p.cobertura.CoberturaSensor - parsing /Users/eric/Tmp/sonar-cobertura/target/test-classes/org/sonar/plugins/cobertura/CoberturaSensorTest/commons-chain-coverage.xml
+09:10:45.022 INFO  o.s.p.cobertura.CoberturaSensor - parsing /Users/eric/Tmp/sonar-cobertura/target/test-classes/org/sonar/plugins/cobertura/CoberturaSensorTest/commons-chain-coverage.xml
+09:10:45.064 INFO  o.s.p.cobertura.CoberturaSensor - parsing /Users/eric/Tmp/sonar-cobertura/target/test-classes/org/sonar/plugins/cobertura/CoberturaSensorTest/commons-chain-coverage.xml
+09:10:45.101 INFO  o.s.p.cobertura.CoberturaSensor - parsing /Users/eric/Tmp/sonar-cobertura/target/test-classes/org/sonar/plugins/cobertura/CoberturaSensorTest/commons-chain-coverage.xml
+09:10:45.127 INFO  o.s.p.cobertura.CoberturaSensor - parsing /Users/eric/Tmp/sonar-cobertura/target/test-classes/org/sonar/plugins/cobertura/CoberturaSensorTest/commons-chain-coverage.xml
+09:10:45.147 INFO  o.s.p.cobertura.CoberturaSensor - parsing /Users/eric/Tmp/sonar-cobertura/target/test-classes/org/sonar/plugins/cobertura/CoberturaSensorTest/commons-chain-coverage.xml
+09:10:45.162 INFO  o.s.p.cobertura.CoberturaSensor - parsing /Users/eric/Tmp/sonar-cobertura/target/test-classes/org/sonar/plugins/cobertura/CoberturaSensorTest/commons-chain-coverage.xml
+09:10:45.206 INFO  o.s.p.cobertura.CoberturaSensor - parsing /Users/eric/Tmp/sonar-cobertura/target/test-classes/org/sonar/plugins/cobertura/CoberturaSensorTest/commons-chain-coverage.xml
