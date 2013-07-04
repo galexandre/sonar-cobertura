@@ -1,6 +1,6 @@
 /*
- * Sonar Java
- * Copyright (C) 2012 SonarSource
+ * SonarQube Cobertura Plugin
+ * Copyright (C) 2013 ${owner}
  * dev@sonar.codehaus.org
  *
  * This program is free software; you can redistribute it and/or
