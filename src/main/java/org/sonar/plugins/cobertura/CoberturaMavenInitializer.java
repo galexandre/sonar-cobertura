@@ -19,12 +19,12 @@
  */
 package org.sonar.plugins.cobertura;
 
-import org.apache.commons.configuration.Configuration;
 import org.sonar.api.batch.CoverageExtension;
 import org.sonar.api.batch.Initializer;
 import org.sonar.api.batch.maven.DependsUponMavenPlugin;
 import org.sonar.api.batch.maven.MavenPlugin;
 import org.sonar.api.batch.maven.MavenPluginHandler;
+import org.sonar.api.config.Settings;
 import org.sonar.api.resources.Project;
 import org.sonar.plugins.cobertura.api.CoberturaUtils;
 import org.sonar.plugins.cobertura.base.CoberturaConstants;
@@ -37,10 +37,12 @@ public class CoberturaMavenInitializer extends Initializer implements CoverageEx
 
   private CoberturaMavenPluginHandler handler;
   private CoberturaSettings coberturaSettings;
+  private Settings settings;
 
-  public CoberturaMavenInitializer(CoberturaMavenPluginHandler handler, CoberturaSettings coberturaSettings) {
+  public CoberturaMavenInitializer(CoberturaMavenPluginHandler handler, CoberturaSettings coberturaSettings, Settings settings) {
     this.handler = handler;
     this.coberturaSettings = coberturaSettings;
+    this.settings = settings;
   }
 
   public MavenPluginHandler getMavenPluginHandler(Project project) {
@@ -54,13 +56,12 @@ public class CoberturaMavenInitializer extends Initializer implements CoverageEx
 
   @Override
   public void execute(Project project) {
-    Configuration conf = project.getConfiguration();
-    if (!conf.containsKey(CoberturaConstants.COBERTURA_REPORT_PATH_PROPERTY)) {
+    if (!settings.hasKey(CoberturaConstants.COBERTURA_REPORT_PATH_PROPERTY)) {
       String report = getReportPathFromPluginConfiguration(project);
       if (report == null) {
         report = getDefaultReportPath(project);
       }
-      conf.setProperty(CoberturaConstants.COBERTURA_REPORT_PATH_PROPERTY, report);
+      settings.setProperty(CoberturaConstants.COBERTURA_REPORT_PATH_PROPERTY, report);
     }
   }
 
@@ -70,9 +71,9 @@ public class CoberturaMavenInitializer extends Initializer implements CoverageEx
 
   private static String getReportPathFromPluginConfiguration(Project project) {
     MavenPlugin mavenPlugin = MavenPlugin.getPlugin(
-      project.getPom(),
-      CoberturaUtils.COBERTURA_GROUP_ID,
-      CoberturaUtils.COBERTURA_ARTIFACT_ID);
+        project.getPom(),
+        CoberturaUtils.COBERTURA_GROUP_ID,
+        CoberturaUtils.COBERTURA_ARTIFACT_ID);
     if (mavenPlugin != null) {
       String path = mavenPlugin.getParameter("outputDirectory");
       if (path != null) {
