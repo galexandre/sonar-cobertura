@@ -1,1 +1,0 @@
-09:10:45.311 WARN  org.sonar.INFO - Cobertura report not found at coverage.xml
