@@ -23,7 +23,7 @@ import org.sonar.api.batch.maven.MavenPlugin;
 import org.sonar.api.batch.maven.MavenPluginHandler;
 import org.sonar.api.batch.maven.MavenSurefireUtils;
 import org.sonar.api.resources.Project;
-import org.sonar.plugins.cobertura.api.CoberturaUtils;
+import org.sonar.plugins.cobertura.base.CoberturaConstants;
 
 public class CoberturaMavenPluginHandler implements MavenPluginHandler {
 
@@ -34,11 +34,11 @@ public class CoberturaMavenPluginHandler implements MavenPluginHandler {
   }
 
   public String getGroupId() {
-    return CoberturaUtils.COBERTURA_GROUP_ID;
+    return CoberturaConstants.COBERTURA_GROUP_ID;
   }
 
   public String getArtifactId() {
-    return CoberturaUtils.COBERTURA_ARTIFACT_ID;
+    return CoberturaConstants.COBERTURA_ARTIFACT_ID;
   }
 
   public String getVersion() {

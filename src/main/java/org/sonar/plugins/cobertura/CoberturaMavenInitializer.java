@@ -26,7 +26,6 @@ import org.sonar.api.batch.maven.MavenPlugin;
 import org.sonar.api.batch.maven.MavenPluginHandler;
 import org.sonar.api.config.Settings;
 import org.sonar.api.resources.Project;
-import org.sonar.plugins.cobertura.api.CoberturaUtils;
 import org.sonar.plugins.cobertura.base.CoberturaConstants;
 
 /**
@@ -72,8 +71,8 @@ public class CoberturaMavenInitializer extends Initializer implements CoverageEx
   private static String getReportPathFromPluginConfiguration(Project project) {
     MavenPlugin mavenPlugin = MavenPlugin.getPlugin(
         project.getPom(),
-        CoberturaUtils.COBERTURA_GROUP_ID,
-        CoberturaUtils.COBERTURA_ARTIFACT_ID);
+        CoberturaConstants.COBERTURA_GROUP_ID,
+        CoberturaConstants.COBERTURA_ARTIFACT_ID);
     if (mavenPlugin != null) {
       String path = mavenPlugin.getParameter("outputDirectory");
       if (path != null) {

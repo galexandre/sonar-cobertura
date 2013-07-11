@@ -26,7 +26,8 @@ import org.sonar.api.batch.SensorContext;
 import org.sonar.api.resources.JavaFile;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.Resource;
-import org.sonar.plugins.cobertura.api.AbstractCoberturaParser;
+import org.sonar.api.utils.CoberturaReportParserUtils;
+import org.sonar.api.utils.CoberturaReportParserUtils.FileResolver;
 import org.sonar.plugins.cobertura.base.CoberturaConstants;
 
 import java.io.File;
@@ -59,18 +60,16 @@ public class CoberturaSensor implements Sensor, CoverageExtension {
 
   protected void parseReport(File xmlFile, final SensorContext context) {
     LoggerFactory.getLogger(CoberturaSensor.class).info("parsing {}", xmlFile);
-    new JavaCoberturaParser().parseReport(xmlFile, context);
+    CoberturaReportParserUtils.parseReport(xmlFile, context, new FileResolver() {
+      @Override
+      public Resource<?> resolve(String filename) {
+        return new JavaFile(filename);
+      }
+    });
   }
 
   @Override
   public String toString() {
     return getClass().getSimpleName();
-  }
-
-  private static final class JavaCoberturaParser extends AbstractCoberturaParser {
-    @Override
-    protected Resource<?> getResource(String fileName) {
-      return new JavaFile(fileName);
-    }
   }
 }

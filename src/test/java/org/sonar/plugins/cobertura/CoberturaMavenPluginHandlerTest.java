@@ -25,7 +25,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.sonar.api.batch.maven.MavenPlugin;
 import org.sonar.api.resources.Project;
-import org.sonar.plugins.cobertura.api.CoberturaUtils;
+import org.sonar.plugins.cobertura.base.CoberturaConstants;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -62,7 +62,7 @@ public class CoberturaMavenPluginHandlerTest {
     Project project = mock(Project.class);
     when(project.getPom()).thenReturn(new MavenProject());
 
-    MavenPlugin coberturaPlugin = new MavenPlugin(CoberturaUtils.COBERTURA_GROUP_ID, CoberturaUtils.COBERTURA_ARTIFACT_ID, null);
+    MavenPlugin coberturaPlugin = new MavenPlugin(CoberturaConstants.COBERTURA_GROUP_ID, CoberturaConstants.COBERTURA_ARTIFACT_ID, null);
     handler.configure(project, coberturaPlugin);
 
     assertThat(coberturaPlugin.getParameter("formats/format")).isEqualTo("xml");
@@ -71,7 +71,7 @@ public class CoberturaMavenPluginHandlerTest {
   @Test
   public void should_set_max_memory() {
     when(settings.getMaxMemory()).thenReturn("128m");
-    MavenPlugin coberturaPlugin = new MavenPlugin(CoberturaUtils.COBERTURA_GROUP_ID, CoberturaUtils.COBERTURA_ARTIFACT_ID, null);
+    MavenPlugin coberturaPlugin = new MavenPlugin(CoberturaConstants.COBERTURA_GROUP_ID, CoberturaConstants.COBERTURA_ARTIFACT_ID, null);
 
     Project project = mock(Project.class, Mockito.RETURNS_MOCKS);
     handler.configure(project, coberturaPlugin);
