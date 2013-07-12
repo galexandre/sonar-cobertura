@@ -21,18 +21,20 @@ package org.sonar.plugins.cobertura;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.sonar.api.config.PropertyDefinitions;
 import org.sonar.api.config.Settings;
-import org.sonar.api.resources.InputFile;
-import org.sonar.api.resources.InputFileUtils;
 import org.sonar.api.resources.Java;
 import org.sonar.api.resources.Project;
-import org.sonar.api.resources.ProjectFileSystem;
+import org.sonar.api.scan.filesystem.FileQuery;
+import org.sonar.api.scan.filesystem.ModuleFileSystem;
 import org.sonar.plugins.java.api.JavaSettings;
 
+import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -40,22 +42,21 @@ public class CoberturaSettingsTest {
 
   private Settings settings;
   private JavaSettings javaSettings;
-  private ProjectFileSystem fileSystem;
+  private ModuleFileSystem fileSystem;
   private Project javaProject;
   private CoberturaSettings coberturaSettings;
 
   @Before
   public void before() {
-    settings = new Settings();
+    settings = new Settings(new PropertyDefinitions(new CoberturaPlugin().getExtensions().toArray()));
     javaSettings = mock(JavaSettings.class);
     when(javaSettings.getEnabledCoveragePlugin()).thenReturn("cobertura");
-    fileSystem = mock(ProjectFileSystem.class);
-    when(fileSystem.mainFiles(Java.KEY)).thenReturn(Arrays.asList(InputFileUtils.create(null, "")));
+    fileSystem = mock(ModuleFileSystem.class);
+    when(fileSystem.files(any(FileQuery.class))).thenReturn(Arrays.asList(new File("")));
     javaProject = mock(Project.class);
     when(javaProject.getLanguageKey()).thenReturn(Java.KEY);
-    when(javaProject.getFileSystem()).thenReturn(fileSystem);
     when(javaProject.getAnalysisType()).thenReturn(Project.AnalysisType.DYNAMIC);
-    coberturaSettings = new CoberturaSettings(settings, javaSettings);
+    coberturaSettings = new CoberturaSettings(javaSettings, fileSystem);
   }
 
   @Test
@@ -73,7 +74,7 @@ public class CoberturaSettingsTest {
 
   @Test
   public void should_be_disabled_if_java_project_without_sources() {
-    when(fileSystem.mainFiles(Java.KEY)).thenReturn(Collections.<InputFile>emptyList());
+    when(fileSystem.files(any(FileQuery.class))).thenReturn(Collections.<File> emptyList());
     assertThat(coberturaSettings.isEnabled(javaProject)).isFalse();
   }
 
@@ -89,18 +90,12 @@ public class CoberturaSettingsTest {
     assertThat(coberturaSettings.isEnabled(javaProject)).isTrue();
   }
 
-  @Test
-  public void should_configure_max_memory() {
-    settings.setProperty("sonar.cobertura.maxmem", "128m");
-    assertThat(coberturaSettings.getMaxMemory()).isEqualTo("128m");
-  }
-
   /**
    * http://jira.codehaus.org/browse/SONAR-2897: there used to be a typo in the parameter name (was "sonar.cobertura.maxmen")
    */
   @Test
   public void should_support_deprecated_max_memory() {
     settings.setProperty("sonar.cobertura.maxmen", "128m");
-    assertThat(coberturaSettings.getMaxMemory()).isEqualTo("128m");
+    assertThat(settings.getString("sonar.cobertura.maxmem")).isEqualTo("128m");
   }
 }

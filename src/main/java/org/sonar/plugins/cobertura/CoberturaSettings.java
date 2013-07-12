@@ -19,35 +19,26 @@
  */
 package org.sonar.plugins.cobertura;
 
-import org.apache.commons.lang.StringUtils;
 import org.sonar.api.BatchExtension;
-import org.sonar.api.config.Settings;
 import org.sonar.api.resources.Java;
 import org.sonar.api.resources.Project;
-import org.sonar.plugins.cobertura.base.CoberturaConstants;
+import org.sonar.api.scan.filesystem.FileQuery;
+import org.sonar.api.scan.filesystem.ModuleFileSystem;
 import org.sonar.plugins.java.api.JavaSettings;
 
 public class CoberturaSettings implements BatchExtension {
-  private Settings settings;
   private JavaSettings javaSettings;
+  private ModuleFileSystem fileSystem;
 
-  public CoberturaSettings(Settings settings, JavaSettings javaSettings) {
-    this.settings = settings;
+  public CoberturaSettings(JavaSettings javaSettings, ModuleFileSystem fileSystem) {
     this.javaSettings = javaSettings;
+    this.fileSystem = fileSystem;
   }
 
   public boolean isEnabled(Project project) {
     return Java.KEY.equals(project.getLanguageKey())
       && CoberturaPlugin.PLUGIN_KEY.equals(javaSettings.getEnabledCoveragePlugin())
-      && !project.getFileSystem().mainFiles(Java.KEY).isEmpty()
+      && !fileSystem.files(FileQuery.onSource().onLanguage(Java.KEY)).isEmpty()
       && project.getAnalysisType().isDynamic(true);
-  }
-
-  public String getMaxMemory() {
-    // http://jira.codehaus.org/browse/SONAR-2897: there used to be a typo in the parameter name (was "sonar.cobertura.maxmen")
-    return StringUtils.defaultIfEmpty(
-      settings.getString("sonar.cobertura.maxmen"),
-      settings.getString(CoberturaConstants.COBERTURA_MAXMEM_PROPERTY)
-    );
   }
 }

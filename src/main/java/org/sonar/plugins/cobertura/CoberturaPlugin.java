@@ -50,6 +50,8 @@ public final class CoberturaPlugin extends SonarPlugin {
         .name("Maxmem")
         .description("Maximum memory to pass to JVM of Cobertura processes.")
         .onQualifiers(Qualifiers.PROJECT)
+        // http://jira.codehaus.org/browse/SONAR-2897: there used to be a typo in the parameter name (was "sonar.cobertura.maxmen")
+        .deprecatedKey("sonar.cobertura.maxmen")
         .build(),
 
       CoberturaSettings.class,

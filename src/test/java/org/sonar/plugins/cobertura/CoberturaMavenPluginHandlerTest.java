@@ -24,6 +24,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.sonar.api.batch.maven.MavenPlugin;
+import org.sonar.api.config.PropertyDefinitions;
+import org.sonar.api.config.Settings;
 import org.sonar.api.resources.Project;
 import org.sonar.plugins.cobertura.base.CoberturaConstants;
 
@@ -34,11 +36,11 @@ import static org.mockito.Mockito.when;
 public class CoberturaMavenPluginHandlerTest {
 
   private CoberturaMavenPluginHandler handler;
-  private CoberturaSettings settings;
+  private Settings settings;
 
   @Before
   public void before() {
-    settings = mock(CoberturaSettings.class);
+    settings = new Settings(new PropertyDefinitions(new CoberturaPlugin().getExtensions().toArray()));
     handler = new CoberturaMavenPluginHandler(settings);
   }
 
@@ -70,7 +72,7 @@ public class CoberturaMavenPluginHandlerTest {
 
   @Test
   public void should_set_max_memory() {
-    when(settings.getMaxMemory()).thenReturn("128m");
+    settings.setProperty(CoberturaConstants.COBERTURA_MAXMEM_PROPERTY, "128m");
     MavenPlugin coberturaPlugin = new MavenPlugin(CoberturaConstants.COBERTURA_GROUP_ID, CoberturaConstants.COBERTURA_ARTIFACT_ID, null);
 
     Project project = mock(Project.class, Mockito.RETURNS_MOCKS);

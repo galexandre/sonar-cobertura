@@ -22,14 +22,15 @@ package org.sonar.plugins.cobertura;
 import org.sonar.api.batch.maven.MavenPlugin;
 import org.sonar.api.batch.maven.MavenPluginHandler;
 import org.sonar.api.batch.maven.MavenSurefireUtils;
+import org.sonar.api.config.Settings;
 import org.sonar.api.resources.Project;
 import org.sonar.plugins.cobertura.base.CoberturaConstants;
 
 public class CoberturaMavenPluginHandler implements MavenPluginHandler {
 
-  private final CoberturaSettings settings;
+  private final Settings settings;
 
-  public CoberturaMavenPluginHandler(CoberturaSettings settings) {
+  public CoberturaMavenPluginHandler(Settings settings) {
     this.settings = settings;
   }
 
@@ -60,6 +61,6 @@ public class CoberturaMavenPluginHandler implements MavenPluginHandler {
 
   private void configureCobertura(MavenPlugin coberturaPlugin) {
     coberturaPlugin.setParameter("formats/format", "xml");
-    coberturaPlugin.setParameter("maxmem", settings.getMaxMemory());
+    coberturaPlugin.setParameter("maxmem", settings.getString(CoberturaConstants.COBERTURA_MAXMEM_PROPERTY));
   }
 }
