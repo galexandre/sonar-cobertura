@@ -45,8 +45,8 @@
   </ciManagement>
 
   <properties>
-    <sonar.version>3.7-SNAPSHOT</sonar.version>
-    <sonar-java.version>1.3</sonar-java.version>
+    <sonar.version>3.6</sonar.version>
+    <sonar-java.version>1.4</sonar-java.version>
   </properties>
 
   <dependencies>
@@ -59,7 +59,8 @@
     <dependency>
       <groupId>org.codehaus.sonar-plugins.java</groupId>
       <artifactId>sonar-java-plugin</artifactId>
-      <version>${sonar-java.version}</version>
+      <!--version>${sonar-java.version}</version-->
+      <version>1.4-SNAPSHOT</version>
       <type>sonar-plugin</type>
       <scope>provided</scope>
     </dependency>
