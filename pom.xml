@@ -6,11 +6,11 @@
     <groupId>org.codehaus.sonar-plugins</groupId>
     <artifactId>parent</artifactId>
     <version>17</version>
-    <relativePath/>
+    <relativePath />
   </parent>
 
   <artifactId>sonar-cobertura-plugin</artifactId>
-  <version>1.4-SNAPSHOT</version>
+  <version>1.4</version>
   <packaging>sonar-plugin</packaging>
 
   <name>SonarQube Cobertura Plugin</name>
@@ -33,7 +33,7 @@
     <connection>scm:git:git@github.com:SonarCommunity/sonar-cobertura.git</connection>
     <developerConnection>scm:git:git@github.com:SonarCommunity/sonar-cobertura.git</developerConnection>
     <url>https://github.com/SonarCommunity/sonar-cobertura</url>
-    <tag>HEAD</tag>
+    <tag>1.4</tag>
   </scm>
   <issueManagement>
     <system>JIRA</system>
@@ -59,7 +59,7 @@
     <dependency>
       <groupId>org.codehaus.sonar-plugins.java</groupId>
       <artifactId>sonar-java-plugin</artifactId>
-      <version>${sonar-java.version}</version>
+      <version>1.4</version>
       <type>sonar-plugin</type>
       <scope>provided</scope>
     </dependency>
