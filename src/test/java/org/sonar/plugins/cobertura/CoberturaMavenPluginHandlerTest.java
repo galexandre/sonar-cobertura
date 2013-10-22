@@ -55,7 +55,7 @@ public class CoberturaMavenPluginHandlerTest {
   public void test_metadata() {
     assertThat(handler.getGroupId()).isEqualTo("org.codehaus.mojo");
     assertThat(handler.getArtifactId()).isEqualTo("cobertura-maven-plugin");
-    assertThat(handler.getVersion()).isEqualTo("2.5.1");
+    assertThat(handler.getVersion()).isEqualTo("2.6");
     assertThat(handler.getGoals()).containsOnly("cobertura");
   }
 

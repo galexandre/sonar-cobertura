@@ -43,7 +43,7 @@ public class CoberturaMavenPluginHandler implements MavenPluginHandler {
   }
 
   public String getVersion() {
-    return "2.5.1";
+    return "2.6";
   }
 
   public boolean isFixedVersion() {
