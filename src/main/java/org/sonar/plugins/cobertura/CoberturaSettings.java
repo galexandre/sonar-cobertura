@@ -36,8 +36,7 @@ public class CoberturaSettings implements BatchExtension {
   }
 
   public boolean isEnabled(Project project) {
-    return Java.KEY.equals(project.getLanguageKey())
-      && CoberturaPlugin.PLUGIN_KEY.equals(javaSettings.getEnabledCoveragePlugin())
+    return CoberturaPlugin.PLUGIN_KEY.equals(javaSettings.getEnabledCoveragePlugin())
       && !fileSystem.files(FileQuery.onSource().onLanguage(Java.KEY)).isEmpty()
       && project.getAnalysisType().isDynamic(true);
   }

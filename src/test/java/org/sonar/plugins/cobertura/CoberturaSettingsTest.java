@@ -65,14 +65,6 @@ public class CoberturaSettingsTest {
   }
 
   @Test
-  public void should_be_disabled_if_not_java() {
-    Project phpProject = mock(Project.class);
-    when(phpProject.getLanguageKey()).thenReturn("php");
-
-    assertThat(coberturaSettings.isEnabled(phpProject)).isFalse();
-  }
-
-  @Test
   public void should_be_disabled_if_java_project_without_sources() {
     when(fileSystem.files(any(FileQuery.class))).thenReturn(Collections.<File> emptyList());
     assertThat(coberturaSettings.isEnabled(javaProject)).isFalse();

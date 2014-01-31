@@ -24,12 +24,9 @@ import org.sonar.api.batch.CoverageExtension;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.config.Settings;
-import org.sonar.api.resources.JavaFile;
 import org.sonar.api.resources.Project;
-import org.sonar.api.resources.Resource;
 import org.sonar.api.scan.filesystem.ModuleFileSystem;
 import org.sonar.api.scan.filesystem.PathResolver;
-import org.sonar.plugins.cobertura.CoberturaReportParserUtils.FileResolver;
 
 import java.io.File;
 
@@ -62,21 +59,17 @@ public class CoberturaSensor implements Sensor, CoverageExtension {
       LoggerFactory.getLogger(getClass()).warn("Cobertura report not found at {}", report);
       return;
     }
-    parseReport(report, context);
+    parseReport(report, context, project);
   }
 
-  protected void parseReport(File xmlFile, final SensorContext context) {
+  protected void parseReport(File xmlFile, SensorContext context, Project project) {
     LoggerFactory.getLogger(CoberturaSensor.class).info("parsing {}", xmlFile);
-    CoberturaReportParserUtils.parseReport(xmlFile, context, new FileResolver() {
-      @Override
-      public Resource resolve(String filename) {
-        return new JavaFile(filename);
-      }
-    });
+    CoberturaReportParser.parseReport(xmlFile, context, project);
   }
 
   @Override
   public String toString() {
     return getClass().getSimpleName();
   }
+
 }

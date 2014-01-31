@@ -19,50 +19,60 @@
  */
 package org.sonar.plugins.cobertura;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.staxmate.in.SMHierarchicCursor;
 import org.codehaus.staxmate.in.SMInputCursor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.measures.CoverageMeasuresBuilder;
 import org.sonar.api.measures.Measure;
+import org.sonar.api.resources.Project;
 import org.sonar.api.resources.Resource;
 import org.sonar.api.utils.StaxParser;
 import org.sonar.api.utils.XmlParserException;
 
 import javax.xml.stream.XMLStreamException;
-
 import java.io.File;
 import java.text.ParseException;
+import java.util.List;
 import java.util.Map;
 
 import static java.util.Locale.ENGLISH;
 import static org.sonar.api.utils.ParsingUtils.parseNumber;
 
-public class CoberturaReportParserUtils {
+public class CoberturaReportParser {
 
-  private CoberturaReportParserUtils() {
-  }
+  private final Project project;
+  private final SensorContext context;
 
-  public interface FileResolver {
-
-    /**
-     * Return a SonarQube file resource from a filename present in Cobertura report
-     */
-    Resource resolve(String filename);
+  private CoberturaReportParser(SensorContext context, Project project) {
+    this.context = context;
+    this.project = project;
   }
 
   /**
    * Parse a Cobertura xml report and create measures accordingly
    */
-  public static void parseReport(File xmlFile, final SensorContext context, final FileResolver fileResolver) {
+  public static void parseReport(File xmlFile, SensorContext context, Project project) {
+    new CoberturaReportParser(context, project).parse(xmlFile);
+  }
+
+  private void parse(File xmlFile) {
     try {
       StaxParser parser = new StaxParser(new StaxParser.XmlStreamHandler() {
 
         public void stream(SMHierarchicCursor rootCursor) throws XMLStreamException {
+          List<File> sourceDirs = Lists.newArrayList();
           rootCursor.advance();
-          collectPackageMeasures(rootCursor.descendantElementCursor("package"), context, fileResolver);
+          SMInputCursor cursor = rootCursor.childCursor();
+          while (cursor.getNext() != null) {
+            if ("sources".equals(cursor.getLocalName())) {
+              collectSourceDirs(cursor.childElementCursor("source"), sourceDirs);
+            } else if ("packages".equals(cursor.getLocalName())) {
+              collectPackageMeasures(cursor.childElementCursor("package"), sourceDirs);
+            }
+          }
         }
       });
       parser.parse(xmlFile);
@@ -71,27 +81,42 @@ public class CoberturaReportParserUtils {
     }
   }
 
-  private static void collectPackageMeasures(SMInputCursor pack, SensorContext context, final FileResolver fileResolver) throws XMLStreamException {
+  private void collectSourceDirs(SMInputCursor source, List<File> sourceDirs) throws XMLStreamException {
+    while (source.getNext() != null) {
+      sourceDirs.add(new File(source.getElemStringValue()));
+    }
+  }
+
+  private void collectPackageMeasures(SMInputCursor pack, List<File> sourceDirs) throws XMLStreamException {
     while (pack.getNext() != null) {
       Map<String, CoverageMeasuresBuilder> builderByFilename = Maps.newHashMap();
       collectFileMeasures(pack.descendantElementCursor("class"), builderByFilename);
       for (Map.Entry<String, CoverageMeasuresBuilder> entry : builderByFilename.entrySet()) {
-        String filename = sanitizeFilename(entry.getKey());
-        Resource<?> file = fileResolver.resolve(filename);
-        if (fileExists(context, file)) {
-          for (Measure measure : entry.getValue().createMeasures()) {
-            context.saveMeasure(file, measure);
-          }
-        }
+        save(sourceDirs, entry.getKey(), entry.getValue());
       }
     }
   }
 
-  private static boolean fileExists(SensorContext context, Resource<?> file) {
+  private void save(List<File> sourceDirs, String filename, CoverageMeasuresBuilder coverage) {
+    for (File sourceDir : sourceDirs) {
+      File file = new File(sourceDir, filename);
+      if (file.isFile()) {
+        Resource resource = org.sonar.api.resources.File.fromIOFile(file, project);
+        if (resourceExists(resource)) {
+          for (Measure measure : coverage.createMeasures()) {
+            context.saveMeasure(resource, measure);
+          }
+        }
+        break;
+      }
+    }
+  }
+
+  private boolean resourceExists(Resource<?> file) {
     return context.getResource(file) != null;
   }
 
-  private static void collectFileMeasures(SMInputCursor clazz, Map<String, CoverageMeasuresBuilder> builderByFilename) throws XMLStreamException {
+  private void collectFileMeasures(SMInputCursor clazz, Map<String, CoverageMeasuresBuilder> builderByFilename) throws XMLStreamException {
     while (clazz.getNext() != null) {
       String fileName = clazz.getAttrValue("filename");
       CoverageMeasuresBuilder builder = builderByFilename.get(fileName);
@@ -103,7 +128,7 @@ public class CoberturaReportParserUtils {
     }
   }
 
-  private static void collectFileData(SMInputCursor clazz, CoverageMeasuresBuilder builder) throws XMLStreamException {
+  private void collectFileData(SMInputCursor clazz, CoverageMeasuresBuilder builder) throws XMLStreamException {
     SMInputCursor line = clazz.childElementCursor("lines").advance().childElementCursor("line");
     while (line.getNext() != null) {
       int lineId = Integer.parseInt(line.getAttrValue("number"));
@@ -120,12 +145,6 @@ public class CoberturaReportParserUtils {
         builder.setConditions(lineId, Integer.parseInt(conditions[1]), Integer.parseInt(conditions[0]));
       }
     }
-  }
-
-  private static String sanitizeFilename(String s) {
-    String fileName = FilenameUtils.removeExtension(s);
-    fileName = fileName.replace('/', '.').replace('\\', '.');
-    return fileName;
   }
 
 }
