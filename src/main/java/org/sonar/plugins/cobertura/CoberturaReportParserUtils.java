@@ -40,9 +40,6 @@ import java.util.Map;
 import static java.util.Locale.ENGLISH;
 import static org.sonar.api.utils.ParsingUtils.parseNumber;
 
-/**
- * TODO Remove this class and use the one in sonar-plugin-api when dependency on SonarQube will be raised to 3.7
- */
 public class CoberturaReportParserUtils {
 
   private CoberturaReportParserUtils() {
