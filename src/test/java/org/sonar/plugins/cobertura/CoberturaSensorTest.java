@@ -35,7 +35,6 @@ import org.sonar.api.scan.filesystem.ModuleFileSystem;
 import org.sonar.api.scan.filesystem.PathResolver;
 import org.sonar.api.test.IsMeasure;
 import org.sonar.api.test.IsResource;
-import org.sonar.plugins.cobertura.base.CoberturaConstants;
 
 import java.io.File;
 import java.net.URISyntaxException;

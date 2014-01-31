@@ -17,19 +17,6 @@
  * License along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
  */
-package org.sonar.plugins.cobertura.base;
 
-import org.sonar.api.batch.maven.MavenUtils;
-
-public final class CoberturaConstants {
-
-  public static final String COBERTURA_REPORT_PATH_PROPERTY = "sonar.cobertura.reportPath";
-  public static final String COBERTURA_MAXMEM_PROPERTY = "sonar.cobertura.maxmem";
-  public static final String COBERTURA_MAXMEM_DEFAULT_VALUE = "64m";
-
-  public static final String COBERTURA_GROUP_ID = MavenUtils.GROUP_ID_CODEHAUS_MOJO;
-  public static final String COBERTURA_ARTIFACT_ID = "cobertura-maven-plugin";
-
-  private CoberturaConstants() {
-  }
-}
+@javax.annotation.ParametersAreNonnullByDefault
+package org.sonar.plugins.cobertura;

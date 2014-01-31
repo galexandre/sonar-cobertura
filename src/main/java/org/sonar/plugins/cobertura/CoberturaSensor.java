@@ -30,7 +30,6 @@ import org.sonar.api.resources.Resource;
 import org.sonar.api.scan.filesystem.ModuleFileSystem;
 import org.sonar.api.scan.filesystem.PathResolver;
 import org.sonar.plugins.cobertura.CoberturaReportParserUtils.FileResolver;
-import org.sonar.plugins.cobertura.base.CoberturaConstants;
 
 import java.io.File;
 

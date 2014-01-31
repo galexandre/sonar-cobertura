@@ -24,7 +24,6 @@ import org.sonar.api.CoreProperties;
 import org.sonar.api.SonarPlugin;
 import org.sonar.api.config.PropertyDefinition;
 import org.sonar.api.resources.Qualifiers;
-import org.sonar.plugins.cobertura.base.CoberturaConstants;
 
 import java.util.List;
 

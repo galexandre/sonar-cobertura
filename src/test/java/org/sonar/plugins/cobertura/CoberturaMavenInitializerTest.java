@@ -26,7 +26,6 @@ import org.sonar.api.config.Settings;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.ProjectFileSystem;
 import org.sonar.api.test.MavenTestUtils;
-import org.sonar.plugins.cobertura.base.CoberturaConstants;
 
 import java.io.File;
 

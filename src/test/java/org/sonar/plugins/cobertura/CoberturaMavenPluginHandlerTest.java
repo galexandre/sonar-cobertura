@@ -27,7 +27,6 @@ import org.sonar.api.batch.maven.MavenPlugin;
 import org.sonar.api.config.PropertyDefinitions;
 import org.sonar.api.config.Settings;
 import org.sonar.api.resources.Project;
-import org.sonar.plugins.cobertura.base.CoberturaConstants;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.mock;

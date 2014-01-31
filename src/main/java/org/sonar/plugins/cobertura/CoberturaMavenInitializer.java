@@ -26,7 +26,6 @@ import org.sonar.api.batch.maven.MavenPlugin;
 import org.sonar.api.batch.maven.MavenPluginHandler;
 import org.sonar.api.config.Settings;
 import org.sonar.api.resources.Project;
-import org.sonar.plugins.cobertura.base.CoberturaConstants;
 
 /**
  * Provides {@link CoberturaMavenPluginHandler} and configures correct path to report.

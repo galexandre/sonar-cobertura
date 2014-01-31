@@ -24,7 +24,6 @@ import org.sonar.api.batch.maven.MavenPluginHandler;
 import org.sonar.api.batch.maven.MavenSurefireUtils;
 import org.sonar.api.config.Settings;
 import org.sonar.api.resources.Project;
-import org.sonar.plugins.cobertura.base.CoberturaConstants;
 
 public class CoberturaMavenPluginHandler implements MavenPluginHandler {
 
