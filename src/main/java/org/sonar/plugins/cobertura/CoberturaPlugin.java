@@ -33,7 +33,7 @@ public final class CoberturaPlugin extends SonarPlugin {
 
   private static final String COBERTURA_SUBCATEGORY_NAME = "Cobertura";
 
-  public List<?> getExtensions() {
+  public List getExtensions() {
     return ImmutableList.of(
       PropertyDefinition.builder(CoberturaConstants.COBERTURA_REPORT_PATH_PROPERTY)
         .category(CoreProperties.CATEGORY_JAVA)

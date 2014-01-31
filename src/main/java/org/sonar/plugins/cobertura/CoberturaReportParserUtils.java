@@ -50,7 +50,7 @@ public class CoberturaReportParserUtils {
     /**
      * Return a SonarQube file resource from a filename present in Cobertura report
      */
-    Resource<?> resolve(String filename);
+    Resource resolve(String filename);
   }
 
   /**

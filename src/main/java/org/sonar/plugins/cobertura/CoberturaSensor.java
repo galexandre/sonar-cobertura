@@ -69,7 +69,7 @@ public class CoberturaSensor implements Sensor, CoverageExtension {
     LoggerFactory.getLogger(CoberturaSensor.class).info("parsing {}", xmlFile);
     CoberturaReportParserUtils.parseReport(xmlFile, context, new FileResolver() {
       @Override
-      public Resource<?> resolve(String filename) {
+      public Resource resolve(String filename) {
         return new JavaFile(filename);
       }
     });
