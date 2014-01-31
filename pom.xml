@@ -47,6 +47,8 @@
   <properties>
     <sonar.version>3.6</sonar.version>
     <sonar-java.version>1.4</sonar-java.version>
+
+    <maven.test.redirectTestOutputToFile>true</maven.test.redirectTestOutputToFile>
   </properties>
 
   <dependencies>
