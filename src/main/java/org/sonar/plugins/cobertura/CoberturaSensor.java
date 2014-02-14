@@ -27,6 +27,7 @@ import org.sonar.api.config.Settings;
 import org.sonar.api.resources.Project;
 import org.sonar.api.scan.filesystem.ModuleFileSystem;
 import org.sonar.api.scan.filesystem.PathResolver;
+import org.sonar.plugins.java.api.JavaResourceLocator;
 
 import java.io.File;
 
@@ -36,12 +37,14 @@ public class CoberturaSensor implements Sensor, CoverageExtension {
   private ModuleFileSystem fileSystem;
   private PathResolver pathResolver;
   private Settings settings;
+  private final JavaResourceLocator javaResourceLocator;
 
-  public CoberturaSensor(CoberturaSettings coberturaSettings, ModuleFileSystem fileSystem, PathResolver pathResolver, Settings settings) {
+  public CoberturaSensor(CoberturaSettings coberturaSettings, ModuleFileSystem fileSystem, PathResolver pathResolver, Settings settings, JavaResourceLocator javaResourceLocator) {
     this.coberturaSettings = coberturaSettings;
     this.fileSystem = fileSystem;
     this.pathResolver = pathResolver;
     this.settings = settings;
+    this.javaResourceLocator = javaResourceLocator;
   }
 
   public boolean shouldExecuteOnProject(Project project) {
@@ -59,12 +62,12 @@ public class CoberturaSensor implements Sensor, CoverageExtension {
       LoggerFactory.getLogger(getClass()).warn("Cobertura report not found at {}", report);
       return;
     }
-    parseReport(report, context, project);
+    parseReport(report, context);
   }
 
-  protected void parseReport(File xmlFile, SensorContext context, Project project) {
+  protected void parseReport(File xmlFile, SensorContext context) {
     LoggerFactory.getLogger(CoberturaSensor.class).info("parsing {}", xmlFile);
-    CoberturaReportParser.parseReport(xmlFile, context, project);
+    CoberturaReportParser.parseReport(xmlFile, context, javaResourceLocator);
   }
 
   @Override
