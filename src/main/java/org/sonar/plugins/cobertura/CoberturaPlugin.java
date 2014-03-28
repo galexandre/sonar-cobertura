@@ -29,34 +29,19 @@ import java.util.List;
 
 public final class CoberturaPlugin extends SonarPlugin {
 
-  static final String PLUGIN_KEY = "cobertura";
-
-  private static final String COBERTURA_SUBCATEGORY_NAME = "Cobertura";
+  public static final String COBERTURA_REPORT_PATH_PROPERTY = "sonar.cobertura.reportPath";
 
   public List getExtensions() {
     return ImmutableList.of(
-      PropertyDefinition.builder(CoberturaConstants.COBERTURA_REPORT_PATH_PROPERTY)
-        .category(CoreProperties.CATEGORY_JAVA)
-        .subCategory(COBERTURA_SUBCATEGORY_NAME)
-        .name("Report path")
-        .description("Path (absolute or relative) to Cobertura xml report file.")
-        .onlyOnQualifiers(Qualifiers.PROJECT)
-        .build(),
-      PropertyDefinition.builder(CoberturaConstants.COBERTURA_MAXMEM_PROPERTY)
-        .defaultValue(CoberturaConstants.COBERTURA_MAXMEM_DEFAULT_VALUE)
-        .category(CoreProperties.CATEGORY_JAVA)
-        .subCategory(COBERTURA_SUBCATEGORY_NAME)
-        .name("Maxmem")
-        .description("Maximum memory to pass to JVM of Cobertura processes.")
-        .onQualifiers(Qualifiers.PROJECT)
-        // http://jira.codehaus.org/browse/SONAR-2897: there used to be a typo in the parameter name (was "sonar.cobertura.maxmen")
-        .deprecatedKey("sonar.cobertura.maxmen")
-        .build(),
+        PropertyDefinition.builder(COBERTURA_REPORT_PATH_PROPERTY)
+            .category(CoreProperties.CATEGORY_JAVA)
+            .subCategory("Cobertura")
+            .name("Report path")
+            .description("Path (absolute or relative) to Cobertura xml report file.")
+            .onlyOnQualifiers(Qualifiers.PROJECT)
+            .build(),
 
-      CoberturaSettings.class,
-      CoberturaSensor.class,
-      CoberturaMavenPluginHandler.class,
-      CoberturaMavenInitializer.class);
+        CoberturaSensor.class);
   }
 
 }

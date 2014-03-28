@@ -19,6 +19,7 @@
  */
 package org.sonar.plugins.cobertura;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.LoggerFactory;
 import org.sonar.api.batch.CoverageExtension;
 import org.sonar.api.batch.Sensor;
@@ -33,31 +34,29 @@ import java.io.File;
 
 public class CoberturaSensor implements Sensor, CoverageExtension {
 
-  private CoberturaSettings coberturaSettings;
-  private ModuleFileSystem fileSystem;
+  private ModuleFileSystem moduleFileSystem;
   private PathResolver pathResolver;
   private Settings settings;
   private final JavaResourceLocator javaResourceLocator;
 
-  public CoberturaSensor(CoberturaSettings coberturaSettings, ModuleFileSystem fileSystem, PathResolver pathResolver, Settings settings, JavaResourceLocator javaResourceLocator) {
-    this.coberturaSettings = coberturaSettings;
-    this.fileSystem = fileSystem;
+  public CoberturaSensor(ModuleFileSystem moduleFileSystem, PathResolver pathResolver, Settings settings, JavaResourceLocator javaResourceLocator) {
+    this.moduleFileSystem = moduleFileSystem;
     this.pathResolver = pathResolver;
     this.settings = settings;
     this.javaResourceLocator = javaResourceLocator;
   }
 
   public boolean shouldExecuteOnProject(Project project) {
-    return coberturaSettings.isEnabled(project);
+    return StringUtils.isNotEmpty(settings.getString(CoberturaPlugin.COBERTURA_REPORT_PATH_PROPERTY));
   }
 
   public void analyse(Project project, SensorContext context) {
-    String path = settings.getString(CoberturaConstants.COBERTURA_REPORT_PATH_PROPERTY);
-    if (path == null) {
+    String path = settings.getString(CoberturaPlugin.COBERTURA_REPORT_PATH_PROPERTY);
+    if (StringUtils.isNotEmpty(path)) {
       // wasn't configured - skip
       return;
     }
-    File report = pathResolver.relativeFile(fileSystem.baseDir(), path);
+    File report = pathResolver.relativeFile(moduleFileSystem.baseDir(), path);
     if (!report.exists() || !report.isFile()) {
       LoggerFactory.getLogger(getClass()).warn("Cobertura report not found at {}", report);
       return;

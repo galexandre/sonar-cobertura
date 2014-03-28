@@ -19,6 +19,7 @@
  */
 package org.sonar.plugins.cobertura;
 
+import org.fest.assertions.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.batch.SensorContext;
@@ -65,10 +66,9 @@ public class CoberturaSensorTest {
     context = mock(SensorContext.class);
     ModuleFileSystem fs = mock(ModuleFileSystem.class);
     pathResolver = mock(PathResolver.class);
-    CoberturaSettings coberturaSettings = mock(CoberturaSettings.class);
     settings = new Settings();
     javaResourceLocator = mock(JavaResourceLocator.class);
-    sensor = new CoberturaSensor(coberturaSettings, fs, pathResolver, settings, javaResourceLocator);
+    sensor = new CoberturaSensor(fs, pathResolver, settings, javaResourceLocator);
     resource = mock(Resource.class);
   }
 
@@ -79,10 +79,10 @@ public class CoberturaSensorTest {
 
     Project project = mock(Project.class);
 
-    settings.setProperty(CoberturaConstants.COBERTURA_REPORT_PATH_PROPERTY, "notFound.xml");
+    settings.setProperty(CoberturaPlugin.COBERTURA_REPORT_PATH_PROPERTY, "notFound.xml");
     sensor.analyse(project, context);
 
-    settings.removeProperty(CoberturaConstants.COBERTURA_REPORT_PATH_PROPERTY);
+    settings.removeProperty(CoberturaPlugin.COBERTURA_REPORT_PATH_PROPERTY);
     sensor.analyse(project, context);
   }
 
@@ -141,7 +141,6 @@ public class CoberturaSensorTest {
     verify(context).saveMeasure(eq(resource), argThat(new IsMeasure(CoreMetrics.UNCOVERED_LINES, 5.0)));
   }
 
-//  @Ignore
   @Test
   public void collectFileBranchCoverage() throws URISyntaxException {
     when(javaResourceLocator.findResourceByClassName("org.apache.commons.chain.config.ConfigParser")).thenReturn(resource);
@@ -175,7 +174,7 @@ public class CoberturaSensorTest {
     verify(context, never()).saveMeasure(eq(interfaze), argThat(new IsMeasure(CoreMetrics.UNCOVERED_CONDITIONS)));
   }
 
-//  @Ignore
+  //  @Ignore
   @Test
   public void shouldInsertCoverageAtFileLevel() throws URISyntaxException {
     File coverage = new File(getClass().getResource(
@@ -257,5 +256,18 @@ public class CoberturaSensorTest {
 
   private File getCoverageReport() throws URISyntaxException {
     return new File(getClass().getResource("/org/sonar/plugins/cobertura/CoberturaSensorTest/commons-chain-coverage.xml").toURI());
+  }
+
+  @Test
+  public void should_execute_if_report_path_set() throws Exception {
+    Project project = mock(Project.class);
+    settings.setProperty("sonar.cobertura.reportPath", "coverage.xml");
+    Assertions.assertThat(sensor.shouldExecuteOnProject(project)).isTrue();
+  }
+
+  @Test
+  public void should_not_execute_if_report_path_not_set() throws Exception {
+    Project project = mock(Project.class);
+    Assertions.assertThat(sensor.shouldExecuteOnProject(project)).isFalse();
   }
 }

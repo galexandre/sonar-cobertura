@@ -2,9 +2,7 @@
 <!DOCTYPE coverage SYSTEM "http://cobertura.sourceforge.net/xml/coverage-04.dtd">
 
 
-
-<!-- line 26 is defined in two nodes -->    
-
+<!-- line 26 is defined in two nodes -->
 
 
 <coverage line-rate="0.37142857142857144" branch-rate="0.25" lines-covered="13" lines-valid="35" branches-covered="1"
