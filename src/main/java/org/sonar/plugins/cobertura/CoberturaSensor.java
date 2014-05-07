@@ -52,7 +52,7 @@ public class CoberturaSensor implements Sensor, CoverageExtension {
 
   public void analyse(Project project, SensorContext context) {
     String path = settings.getString(CoberturaPlugin.COBERTURA_REPORT_PATH_PROPERTY);
-    if (StringUtils.isNotEmpty(path)) {
+    if (StringUtils.isEmpty(path)) {
       // wasn't configured - skip
       return;
     }
