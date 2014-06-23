@@ -19,6 +19,7 @@
  */
 package org.sonar.plugins.cobertura;
 
+import com.google.common.collect.Lists;
 import org.fest.assertions.Assertions;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,6 +33,7 @@ import org.sonar.api.resources.Project;
 import org.sonar.api.resources.Qualifiers;
 import org.sonar.api.resources.Resource;
 import org.sonar.api.resources.Scopes;
+import org.sonar.api.scan.filesystem.FileQuery;
 import org.sonar.api.scan.filesystem.ModuleFileSystem;
 import org.sonar.api.scan.filesystem.PathResolver;
 import org.sonar.api.test.IsMeasure;
@@ -60,11 +62,12 @@ public class CoberturaSensorTest {
   private Settings settings;
   private JavaResourceLocator javaResourceLocator;
   private Resource resource;
+  private ModuleFileSystem fs;
 
   @Before
   public void setUp() {
     context = mock(SensorContext.class);
-    ModuleFileSystem fs = mock(ModuleFileSystem.class);
+    fs = mock(ModuleFileSystem.class);
     pathResolver = mock(PathResolver.class);
     settings = new Settings();
     javaResourceLocator = mock(JavaResourceLocator.class);
@@ -259,15 +262,16 @@ public class CoberturaSensorTest {
   }
 
   @Test
-  public void should_execute_if_report_path_set() throws Exception {
+  public void should_execute_if_java_files() throws Exception {
     Project project = mock(Project.class);
-    settings.setProperty("sonar.cobertura.reportPath", "coverage.xml");
+    when(fs.files(any(FileQuery.class))).thenReturn(Lists.newArrayList(new File("mock")));
     Assertions.assertThat(sensor.shouldExecuteOnProject(project)).isTrue();
   }
 
   @Test
-  public void should_not_execute_if_report_path_not_set() throws Exception {
+  public void should_not_execute_if_no_java_files() throws Exception {
     Project project = mock(Project.class);
+    when(fs.files(any(FileQuery.class))).thenReturn(Lists.<File>newArrayList());
     Assertions.assertThat(sensor.shouldExecuteOnProject(project)).isFalse();
   }
 }

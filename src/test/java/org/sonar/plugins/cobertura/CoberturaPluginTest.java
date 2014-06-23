@@ -27,6 +27,6 @@ public class CoberturaPluginTest {
 
   @Test
   public void test_getExtensions() {
-    assertThat(new CoberturaPlugin().getExtensions().size()).isGreaterThan(1);
+    assertThat(new CoberturaPlugin().getExtensions()).hasSize(2);
   }
 }

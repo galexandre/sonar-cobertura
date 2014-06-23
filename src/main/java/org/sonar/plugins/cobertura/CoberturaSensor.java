@@ -26,6 +26,8 @@ import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.config.Settings;
 import org.sonar.api.resources.Project;
+import org.sonar.api.scan.filesystem.FileQuery;
+import org.sonar.api.scan.filesystem.FileType;
 import org.sonar.api.scan.filesystem.ModuleFileSystem;
 import org.sonar.api.scan.filesystem.PathResolver;
 import org.sonar.plugins.java.api.JavaResourceLocator;
@@ -47,7 +49,7 @@ public class CoberturaSensor implements Sensor, CoverageExtension {
   }
 
   public boolean shouldExecuteOnProject(Project project) {
-    return StringUtils.isNotEmpty(settings.getString(CoberturaPlugin.COBERTURA_REPORT_PATH_PROPERTY));
+    return !moduleFileSystem.files(FileQuery.on(FileType.SOURCE).onLanguage("java")).isEmpty();
   }
 
   public void analyse(Project project, SensorContext context) {
