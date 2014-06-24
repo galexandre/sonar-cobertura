@@ -76,7 +76,7 @@ public class CoberturaSensorTest {
   }
 
   @Test
-  public void shouldNotFailIfReportNotSpecifiedOrNotFound() {
+  public void shouldNotFailIfReportNotSpecifiedOrNotFound() throws URISyntaxException {
     when(pathResolver.relativeFile(any(File.class), anyString()))
         .thenReturn(new File("notFound.xml"));
 
@@ -85,7 +85,11 @@ public class CoberturaSensorTest {
     settings.setProperty(CoberturaPlugin.COBERTURA_REPORT_PATH_PROPERTY, "notFound.xml");
     sensor.analyse(project, context);
 
-    settings.removeProperty(CoberturaPlugin.COBERTURA_REPORT_PATH_PROPERTY);
+
+    File report = getCoverageReport();
+    settings.setProperty(CoberturaPlugin.COBERTURA_REPORT_PATH_PROPERTY, report.getParent());
+    when(pathResolver.relativeFile(any(File.class), anyString()))
+        .thenReturn(report.getParentFile().getParentFile());
     sensor.analyse(project, context);
   }
 
