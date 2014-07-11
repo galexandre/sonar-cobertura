@@ -88,7 +88,7 @@ public class CoberturaReportParser {
     }
   }
 
-  private boolean resourceExists(Resource<?> file) {
+  private boolean resourceExists(Resource file) {
     return context.getResource(file) != null;
   }
 

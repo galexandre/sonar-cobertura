@@ -27,8 +27,6 @@ import org.sonar.api.batch.SensorContext;
 import org.sonar.api.config.Settings;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.Measure;
-import org.sonar.api.resources.JavaFile;
-import org.sonar.api.resources.JavaPackage;
 import org.sonar.api.resources.Project;
 import org.sonar.api.resources.Qualifiers;
 import org.sonar.api.resources.Resource;
@@ -43,7 +41,6 @@ import org.sonar.plugins.java.api.JavaResourceLocator;
 import java.io.File;
 import java.net.URISyntaxException;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyDouble;
 import static org.mockito.Matchers.anyString;
@@ -118,24 +115,23 @@ public class CoberturaSensorTest {
   @Test
   public void collectPackageLineCoverage() throws URISyntaxException {
     sensor.parseReport(getCoverageReport(), context);
-
-    verify(context, never()).saveMeasure((Resource) argThat(is(JavaPackage.class)), eq(CoreMetrics.LINE_COVERAGE), anyDouble());
-    verify(context, never()).saveMeasure((Resource) argThat(is(JavaPackage.class)), eq(CoreMetrics.UNCOVERED_LINES), anyDouble());
+    verify(context, never()).saveMeasure(any(Resource.class), eq(CoreMetrics.LINE_COVERAGE), anyDouble());
+    verify(context, never()).saveMeasure(any(Resource.class), eq(CoreMetrics.UNCOVERED_LINES), anyDouble());
   }
 
   @Test
   public void collectPackageBranchCoverage() throws URISyntaxException {
     sensor.parseReport(getCoverageReport(), context);
 
-    verify(context, never()).saveMeasure((Resource) argThat(is(JavaPackage.class)), eq(CoreMetrics.BRANCH_COVERAGE), anyDouble());
-    verify(context, never()).saveMeasure((Resource) argThat(is(JavaPackage.class)), eq(CoreMetrics.UNCOVERED_CONDITIONS), anyDouble());
+    verify(context, never()).saveMeasure(any(Resource.class), eq(CoreMetrics.BRANCH_COVERAGE), anyDouble());
+    verify(context, never()).saveMeasure(any(Resource.class), eq(CoreMetrics.UNCOVERED_CONDITIONS), anyDouble());
   }
 
   @Test
   public void packageCoverageIsCalculatedLaterByDecorator() throws URISyntaxException {
     sensor.parseReport(getCoverageReport(), context);
 
-    verify(context, never()).saveMeasure((Resource) argThat(is(JavaPackage.class)), eq(CoreMetrics.COVERAGE), anyDouble());
+    verify(context, never()).saveMeasure(any(Resource.class), eq(CoreMetrics.COVERAGE), anyDouble());
   }
 
   @Test
@@ -169,7 +165,9 @@ public class CoberturaSensorTest {
   public void javaInterfaceHasNoCoverage() throws URISyntaxException {
     sensor.parseReport(getCoverageReport(), context);
 
-    final JavaFile interfaze = new JavaFile("org.apache.commons.chain.Chain");
+    final Resource interfaze = new org.sonar.api.resources.File("org/apache/commons/chain/Chain");
+
+
     verify(context, never()).saveMeasure(eq(interfaze), argThat(new IsMeasure(CoreMetrics.COVERAGE)));
 
     verify(context, never()).saveMeasure(eq(interfaze), argThat(new IsMeasure(CoreMetrics.LINE_COVERAGE)));
