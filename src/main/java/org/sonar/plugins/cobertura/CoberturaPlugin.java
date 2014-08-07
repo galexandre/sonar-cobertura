@@ -38,7 +38,7 @@ public final class CoberturaPlugin extends SonarPlugin {
             .subCategory("Cobertura")
             .name("Report path")
             .description("Path (absolute or relative) to Cobertura xml report file.")
-            .defaultValue("/target/site/cobertura/coverage.xml")
+            .defaultValue("target/site/cobertura/coverage.xml")
             .onQualifiers(Qualifiers.PROJECT)
             .build(),
 
