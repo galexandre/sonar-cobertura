@@ -31,6 +31,7 @@ public final class CoberturaPlugin extends SonarPlugin {
 
   public static final String COBERTURA_REPORT_PATH_PROPERTY = "sonar.cobertura.reportPath";
 
+  @Override
   public List getExtensions() {
     return ImmutableList.of(
         PropertyDefinition.builder(COBERTURA_REPORT_PATH_PROPERTY)

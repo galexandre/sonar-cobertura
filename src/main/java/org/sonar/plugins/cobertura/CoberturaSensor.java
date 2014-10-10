@@ -50,10 +50,12 @@ public class CoberturaSensor implements Sensor, CoverageExtension {
     this.javaResourceLocator = javaResourceLocator;
   }
 
+  @Override
   public boolean shouldExecuteOnProject(Project project) {
     return !moduleFileSystem.files(FileQuery.on(FileType.SOURCE).onLanguage("java")).isEmpty();
   }
 
+  @Override
   public void analyse(Project project, SensorContext context) {
     String path = settings.getString(CoberturaPlugin.COBERTURA_REPORT_PATH_PROPERTY);
     File report = pathResolver.relativeFile(moduleFileSystem.baseDir(), path);
