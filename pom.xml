@@ -15,7 +15,7 @@
 
   <name>SonarQube Cobertura Plugin</name>
   <description>Code coverage analysis using Cobertura</description>
-  <url>http://docs.codehaus.org/display/SONAR/Cobertura+Plugin</url>
+  <url>http://redirect.sonarsource.com/plugins/cobertura.html</url>
   <inceptionYear>2013</inceptionYear>
   <organization>
     <name>SonarSource</name>
