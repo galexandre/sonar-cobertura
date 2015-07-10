@@ -20,12 +20,7 @@
 
   <properties>
     <maven.test.redirectTestOutputToFile>true</maven.test.redirectTestOutputToFile>
-    <coberturaVersion>DEV</coberturaVersion>
-    <javaVersion>DEV</javaVersion>
-    <sonar.runtimeVersion>DEV</sonar.runtimeVersion>
-    <orchestrator.configUrl>file://${basedir}/orchestrator.properties</orchestrator.configUrl>
   </properties>
-
 
   <dependencies>
     <dependency>
@@ -51,7 +46,7 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
           <configuration>
-            <argLine>-server -DcoberturaVersion="${coberturaVersion}" -DjavaVersion="${javaVersion}" -Dsonar.runtimeVersion="${sonar.runtimeVersion}" -Dorchestrator.configUrl="${orchestrator.configUrl}"</argLine>
+            <argLine>-server</argLine>
             <includes>
               <include>com/sonar/cobertura/it/*Test.java</include>
             </includes>
