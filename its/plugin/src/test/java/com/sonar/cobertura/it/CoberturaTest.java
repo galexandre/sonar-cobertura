@@ -21,6 +21,7 @@ package com.sonar.cobertura.it;
 
 import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.MavenBuild;
+import com.sonar.orchestrator.locator.FileLocation;
 import org.fest.assertions.Delta;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -35,10 +36,9 @@ public class CoberturaTest {
 
   @ClassRule
   public static Orchestrator orchestrator = Orchestrator.builderEnv()
-      .setMainPluginKey("cobertura")
-      .addPlugin("java")
-      .addPlugin("cobertura")
-      .build();
+    .addPlugin("java")
+    .addPlugin(FileLocation.of("../../target/sonar-cobertura-plugin.jar"))
+    .build();
 
   @Test
   public void shouldReuseCoberturaAndSurefireReports() {

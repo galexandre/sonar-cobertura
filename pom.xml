@@ -97,6 +97,7 @@
   </dependencies>
 
   <build>
+    <finalName>${project.artifactId}</finalName>
     <testResources>
       <testResource>
         <directory>${basedir}/src/main/resources</directory>
