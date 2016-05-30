@@ -5,7 +5,8 @@ jdk:
   - oraclejdk7
 
 install: true
-script: ./travis.sh
+script:
+  - mvn verify -B -e -V
 env:
   matrix:
   - TEST=ci
