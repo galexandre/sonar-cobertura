@@ -30,19 +30,15 @@
   </licenses>
 
   <scm>
-    <connection>scm:git:git@github.com:SonarSource/sonar-cobertura.git</connection>
-    <developerConnection>scm:git:git@github.com:SonarSource/sonar-cobertura.git</developerConnection>
-    <url>https://github.com/SonarSource/sonar-cobertura</url>
+    <connection>scm:git:git@github.com:SonarQubeCommunity/sonar-cobertura.git</connection>
+    <developerConnection>scm:git:git@github.com:SonarQubeCommunity/sonar-cobertura.git</developerConnection>
+    <url>https://github.com/SonarQubeCommunity/sonar-cobertura</url>
     <tag>HEAD</tag>
   </scm>
   <issueManagement>
-    <system>JIRA</system>
-    <url>https://jira.codehaus.org/browse/SONARPLUGINS/component/15957</url>
+    <system>GitHub Issues</system>
+    <url>https://github.com/SonarQubeCommunity/sonar-cobertura/issues</url>
   </issueManagement>
-  <ciManagement>
-    <system>Cloudbees</system>
-    <url>https://sonarplugins.ci.cloudbees.com/job/cobertura/</url>
-  </ciManagement>
 
   <properties>
     <sonar.version>4.2</sonar.version>
