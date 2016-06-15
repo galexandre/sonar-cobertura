@@ -5,14 +5,11 @@ jdk:
   - oraclejdk7
 
 install: true
-script:
-  - mvn verify -B -e -V
+script: ./travis.sh
 env:
   matrix:
   - TEST=ci
-  - TEST=plugin SQ_VERSION=DEV
-  - TEST=plugin SQ_VERSION=LATEST_RELEASE
-  - TEST=plugin SQ_VERSION=LTS
+  - TEST=plugin SQ_VERSION=5.5
 
 matrix:
   fast_finish: true
