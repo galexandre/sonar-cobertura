@@ -1,7 +1,7 @@
 /*
  * SonarQube Cobertura Plugin
- * Copyright (C) 2013 SonarSource
- * dev@sonar.codehaus.org
+ * Copyright (C) 2013-2016 SonarSource SA
+ * mailto:contact AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -13,9 +13,9 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 package org.sonar.plugins.cobertura;
 
@@ -25,6 +25,7 @@ import org.apache.commons.lang.StringUtils;
 import org.codehaus.staxmate.in.SMHierarchicCursor;
 import org.codehaus.staxmate.in.SMInputCursor;
 import org.sonar.api.batch.SensorContext;
+import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.measures.CoverageMeasuresBuilder;
 import org.sonar.api.measures.Measure;
 import org.sonar.api.resources.Resource;
@@ -79,7 +80,7 @@ public class CoberturaReportParser {
       collectFileMeasures(pack.descendantElementCursor("class"), builderByFilename);
       for (Map.Entry<String, CoverageMeasuresBuilder> entry : builderByFilename.entrySet()) {
         String className = sanitizeFilename(entry.getKey());
-        Resource resource = javaResourceLocator.findResourceByClassName(className);
+        InputFile resource = javaResourceLocator.findResourceByClassName(className);
         if (resourceExists(resource)) {
           for (Measure measure : entry.getValue().createMeasures()) {
             context.saveMeasure(resource, measure);
@@ -89,7 +90,7 @@ public class CoberturaReportParser {
     }
   }
 
-  private boolean resourceExists(Resource file) {
+  private boolean resourceExists(InputFile file) {
     return context.getResource(file) != null;
   }
 
