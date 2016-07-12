@@ -91,7 +91,7 @@ public class CoberturaReportParser {
   }
 
   private boolean resourceExists(InputFile file) {
-    return context.getResource(file) != null;
+    return file != null && context.getResource(file) != null;
   }
 
   private static void collectFileMeasures(SMInputCursor clazz, Map<String, CoverageMeasuresBuilder> builderByFilename) throws XMLStreamException {
