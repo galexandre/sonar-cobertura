@@ -2,6 +2,11 @@ Sonar Cobertura
 ===============
 [![Build Status](https://api.travis-ci.org/SonarQubeCommunity/sonar-cobertura.svg)](https://travis-ci.org/SonarQubeCommunity/sonar-cobertura)
 
+## Plugin seeking Maintainer(s)
+The plugin is not maintained by SonarSource anymore and is consequently seeking for a maintainer from the community. As a logical consequence and as long as no one is maintaining the plugin, any new issue won't be handled.
+
+If you are interested, don't hesitate to contact Sonarsource using our [mailing list](https://groups.google.com/forum/#!forum/sonarqube) or by sending an email directly to **sonarqube[at]googlegroups.com**!
+
 ## Description / Feature
 This plugin provides the ability to feed SonarQube with code coverage data coming from [Cobertura](http://cobertura.github.io/cobertura/).
 
