@@ -24,7 +24,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.staxmate.in.SMHierarchicCursor;
 import org.codehaus.staxmate.in.SMInputCursor;
-import org.sonar.api.batch.SensorContext;
+import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.measures.CoverageMeasuresBuilder;
 import org.sonar.api.measures.Measure;
@@ -83,7 +83,7 @@ public class CoberturaReportParser {
         InputFile resource = javaResourceLocator.findResourceByClassName(className);
         if (resourceExists(resource)) {
           for (Measure measure : entry.getValue().createMeasures()) {
-            context.saveMeasure(resource, measure);
+            context.newMeasure().forMetric(measure.getMetric()).on(resource).withValue(measure.value()).save();
           }
         }
       }
@@ -91,7 +91,7 @@ public class CoberturaReportParser {
   }
 
   private boolean resourceExists(InputFile file) {
-    return file != null && context.getResource(file) != null;
+    return file != null && context.fileSystem().inputFile(context.fileSystem().predicates().is(file.file())) != null;
   }
 
   private static void collectFileMeasures(SMInputCursor clazz, Map<String, CoverageMeasuresBuilder> builderByFilename) throws XMLStreamException {

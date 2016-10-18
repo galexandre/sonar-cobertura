@@ -9,7 +9,7 @@ script: ./travis.sh
 env:
   matrix:
   - TEST=ci
-  - TEST=plugin SQ_VERSION=5.6
+  - TEST=plugin SQ_VERSION=6.1
 
 matrix:
   fast_finish: true

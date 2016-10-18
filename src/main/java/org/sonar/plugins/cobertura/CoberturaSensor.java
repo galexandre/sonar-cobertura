@@ -21,49 +21,48 @@ package org.sonar.plugins.cobertura;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sonar.api.batch.CoverageExtension;
-import org.sonar.api.batch.Sensor;
-import org.sonar.api.batch.SensorContext;
+import org.sonar.api.batch.sensor.Sensor;
+import org.sonar.api.batch.sensor.SensorDescriptor;
+import org.sonar.api.batch.sensor.SensorContext;
+import org.sonar.api.batch.fs.FileSystem;
+import org.sonar.api.batch.fs.InputFile.Type;
 import org.sonar.api.config.Settings;
-import org.sonar.api.resources.Project;
-import org.sonar.api.scan.filesystem.FileQuery;
-import org.sonar.api.scan.filesystem.FileType;
-import org.sonar.api.scan.filesystem.ModuleFileSystem;
 import org.sonar.api.scan.filesystem.PathResolver;
+import org.sonar.plugins.java.Java;
 import org.sonar.plugins.java.api.JavaResourceLocator;
 
 import java.io.File;
 
-public class CoberturaSensor implements Sensor, CoverageExtension {
+public class CoberturaSensor implements Sensor {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CoberturaSensor.class);
 
-  private ModuleFileSystem moduleFileSystem;
+  private FileSystem fs;
   private PathResolver pathResolver;
   private Settings settings;
   private final JavaResourceLocator javaResourceLocator;
 
-  public CoberturaSensor(ModuleFileSystem moduleFileSystem, PathResolver pathResolver, Settings settings, JavaResourceLocator javaResourceLocator) {
-    this.moduleFileSystem = moduleFileSystem;
+  public CoberturaSensor(FileSystem fs, PathResolver pathResolver, Settings settings, JavaResourceLocator javaResourceLocator) {
+    this.fs = fs;
     this.pathResolver = pathResolver;
     this.settings = settings;
     this.javaResourceLocator = javaResourceLocator;
   }
 
   @Override
-  public boolean shouldExecuteOnProject(Project project) {
-    return !moduleFileSystem.files(FileQuery.on(FileType.SOURCE).onLanguage("java")).isEmpty();
+  public void describe(SensorDescriptor descriptor) {
+    descriptor.onlyOnLanguage(Java.KEY).onlyOnFileType(Type.MAIN).name("CoberturaSensor");
   }
 
   @Override
-  public void analyse(Project project, SensorContext context) {
+  public void execute(SensorContext context) {
     String path = settings.getString(CoberturaPlugin.COBERTURA_REPORT_PATH_PROPERTY);
-    File report = pathResolver.relativeFile(moduleFileSystem.baseDir(), path);
-    if (!report.isFile()) {
+    File report = pathResolver.relativeFile(fs.baseDir(), path);
+    if (!report.isFile() || !report.exists() || !report.canRead()) {
       LOGGER.warn("Cobertura report not found at {}", report);
-      return;
+    } else {
+      parseReport(report, context);
     }
-    parseReport(report, context);
   }
 
   protected void parseReport(File xmlFile, SensorContext context) {
