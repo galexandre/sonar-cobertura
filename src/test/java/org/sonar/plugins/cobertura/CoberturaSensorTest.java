@@ -236,7 +236,8 @@ public class CoberturaSensorTest {
 
     sensor.parseReport(coverage, context);
 
-    verify(newMeasure, atLeast(1)).on(inputFile);
+    verify(newMeasure, times(7)).on(inputFile);
+    
     verify(newMeasure).forMetric(CoreMetrics.LINES_TO_COVER);
     verify(newMeasure).withValue(35);
     verify(newMeasure).forMetric(CoreMetrics.UNCOVERED_LINES);
@@ -245,9 +246,16 @@ public class CoberturaSensorTest {
     verify(newMeasure).withValue(4);
     verify(newMeasure).forMetric(CoreMetrics.UNCOVERED_CONDITIONS);
     verify(newMeasure).withValue(3);
-
     verify(newMeasure).forMetric(CoreMetrics.COVERAGE_LINE_HITS_DATA);
     verify(newMeasure).withValue("22=2;25=0;26=0;29=0;30=0;31=0;34=1;35=1;36=1;37=0;39=1;41=1;44=2;46=1;47=1;50=0;51=0;52=0;53=0;55=0;57=0;60=0;61=0;64=1;71=1;73=1;76=0;77=0;80=0;81=0;85=0;87=0;91=0;93=0;96=1");
+    verify(newMeasure).forMetric(CoreMetrics.CONDITIONS_BY_LINE);
+    verify(newMeasure).withValue("36=2;52=2");
+    verify(newMeasure).forMetric(CoreMetrics.COVERED_CONDITIONS_BY_LINE);
+    verify(newMeasure).withValue("36=1;52=0");
+    
+    verify(newMeasure, times(7)).save();
+
+    verifyNoMoreInteractions(newMeasure);
   }
 
   @Test
