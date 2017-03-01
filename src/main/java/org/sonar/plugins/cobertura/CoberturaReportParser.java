@@ -24,10 +24,13 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.staxmate.in.SMHierarchicCursor;
 import org.codehaus.staxmate.in.SMInputCursor;
-import org.sonar.api.batch.SensorContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.measures.CoverageMeasuresBuilder;
 import org.sonar.api.measures.Measure;
+import org.sonar.api.measures.Metric.ValueType;
 import org.sonar.api.resources.Resource;
 import org.sonar.api.utils.StaxParser;
 import org.sonar.api.utils.XmlParserException;
@@ -35,6 +38,7 @@ import org.sonar.plugins.java.api.JavaResourceLocator;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.File;
+import java.io.Serializable;
 import java.text.ParseException;
 import java.util.Map;
 
@@ -43,6 +47,8 @@ import static org.sonar.api.utils.ParsingUtils.parseNumber;
 
 public class CoberturaReportParser {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(CoberturaReportParser.class);
+    
   private final JavaResourceLocator javaResourceLocator;
   private final SensorContext context;
 
@@ -83,7 +89,9 @@ public class CoberturaReportParser {
         InputFile resource = javaResourceLocator.findResourceByClassName(className);
         if (resourceExists(resource)) {
           for (Measure measure : entry.getValue().createMeasures()) {
-            context.saveMeasure(resource, measure);
+            Serializable value = ValueType.DATA.equals(measure.getMetric().getType()) ? measure.getData() : measure.value();
+            LOGGER.debug("new measure for metric {} on {}: {}",new Object[] {measure.getMetric(), resource, value});
+            context.newMeasure().forMetric(measure.getMetric()).on(resource).withValue(value).save();
           }
         }
       }
@@ -91,7 +99,7 @@ public class CoberturaReportParser {
   }
 
   private boolean resourceExists(InputFile file) {
-    return file != null && context.getResource(file) != null;
+    return file != null && context.fileSystem().inputFile(context.fileSystem().predicates().is(file.file())) != null;
   }
 
   private static void collectFileMeasures(SMInputCursor clazz, Map<String, CoverageMeasuresBuilder> builderByFilename) throws XMLStreamException {
