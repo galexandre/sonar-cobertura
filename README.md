@@ -1,6 +1,6 @@
 Sonar Cobertura 
 ===============
-[![Build Status](https://api.travis-ci.org/SonarQubeCommunity/sonar-cobertura.svg)](https://travis-ci.org/SonarQubeCommunity/sonar-cobertura)
+[![Build Status](https://travis-ci.org/galexandre/sonar-cobertura.svg?branch=master)](https://travis-ci.org/galexandre/sonar-cobertura)
 
 ## Plugin seeking Maintainer(s)
 The plugin is not maintained by SonarSource anymore and is consequently seeking for a maintainer from the community. As a logical consequence and as long as no one is maintaining the plugin, any new issue won't be handled.
