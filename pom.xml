@@ -10,7 +10,7 @@
   </parent>
 
   <artifactId>sonar-cobertura-plugin</artifactId>
-  <version>1.8-SNAPSHOT</version>
+  <version>1.9</version>
   <packaging>sonar-plugin</packaging>
 
   <name>SonarQube Cobertura Plugin</name>
