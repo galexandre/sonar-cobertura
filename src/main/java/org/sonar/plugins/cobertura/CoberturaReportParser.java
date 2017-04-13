@@ -89,9 +89,15 @@ public class CoberturaReportParser {
         InputFile resource = javaResourceLocator.findResourceByClassName(className);
         if (resourceExists(resource)) {
           for (Measure measure : entry.getValue().createMeasures()) {
-            Serializable value = ValueType.DATA.equals(measure.getMetric().getType()) ? measure.getData() : measure.value();
-            LOGGER.debug("new measure for metric {} on {}: {}",new Object[] {measure.getMetric(), resource, value});
-            context.newMeasure().forMetric(measure.getMetric()).on(resource).withValue(value).save();
+			try{
+				Serializable value = ValueType.DATA.equals(measure.getMetric().getType()) ? measure.getData() : measure.value();
+				LOGGER.debug("new measure for metric {} on {}: {}",new Object[] {measure.getMetric(), resource, value});
+				context.newMeasure().forMetric(measure.getMetric()).on(resource).withValue(value).save();
+			} catch (Exception e) {
+				String bad_input = e.getMessage();
+				System.out.println("Bad input: " + bad_input);
+				continue;
+			}
           }
         }
       }
