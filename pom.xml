@@ -10,7 +10,7 @@
   </parent>
 
   <artifactId>sonar-cobertura-plugin</artifactId>
-  <version>1.8-SNAPSHOT</version>
+  <version>1.9.1</version>
   <packaging>sonar-plugin</packaging>
 
   <name>SonarQube Cobertura Plugin</name>
@@ -64,7 +64,7 @@
       <scope>provided</scope>
     </dependency>
 
-    <!-- TODO http://jira.codehaus.org/browse/SONAR-2011
+    <!-- http://jira.codehaus.org/browse/SONAR-2011
     We need following dependency, otherwise we will receive compilation error
     -->
     <dependency>
