@@ -19,11 +19,10 @@
  */
 package org.sonar.plugins.cobertura;
 
-import com.google.common.collect.Lists;
-import org.fest.assertions.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FilePredicates;
@@ -31,32 +30,20 @@ import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputComponent;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.InputFile.Type;
-import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.measure.Metric;
 import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.batch.sensor.measure.NewMeasure;
 import org.sonar.api.config.MapSettings;
 import org.sonar.api.config.Settings;
 import org.sonar.api.measures.CoreMetrics;
-import org.sonar.api.measures.Measure;
-import org.sonar.api.resources.Project;
-import org.sonar.api.resources.Qualifiers;
-import org.sonar.api.resources.Resource;
-import org.sonar.api.resources.Scopes;
 import org.sonar.api.scan.filesystem.PathResolver;
-import org.sonar.api.test.IsMeasure;
-import org.sonar.api.test.IsResource;
 import org.sonar.plugins.java.api.JavaResourceLocator;
 
 import java.io.File;
-import java.io.Serializable;
 import java.net.URISyntaxException;
 
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyDouble;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.argThat;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -211,7 +198,7 @@ public class CoberturaSensorTest {
   public void javaInterfaceHasNoCoverage() throws URISyntaxException {
     sensor.parseReport(getCoverageReport(), context);
 
-    final InputFile interfaze = new DefaultInputFile("moduleKey", "org/apache/commons/chain/Chain");
+    new TestInputFileBuilder("moduleKey", "org/apache/commons/chain/Chain").build();
 
 
     verify(newMeasure, never()).forMetric(CoreMetrics.COVERAGE);

@@ -36,7 +36,7 @@ public class CoberturaTest {
 
   @ClassRule
   public static Orchestrator orchestrator = Orchestrator.builderEnv()
-    .addPlugin("java")
+    .setOrchestratorProperty("javaVersion", "4.11").addPlugin("java")
     .addPlugin(FileLocation.of("../../target/sonar-cobertura-plugin.jar"))
     .build();
 
