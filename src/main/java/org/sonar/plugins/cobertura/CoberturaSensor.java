@@ -28,7 +28,7 @@ import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile.Type;
 import org.sonar.api.config.Settings;
 import org.sonar.api.scan.filesystem.PathResolver;
-import org.sonar.plugins.java.Java;
+import org.sonar.api.CoreProperties;
 import org.sonar.plugins.java.api.JavaResourceLocator;
 
 import java.io.File;
@@ -51,7 +51,7 @@ public class CoberturaSensor implements Sensor {
 
   @Override
   public void describe(SensorDescriptor descriptor) {
-    descriptor.onlyOnLanguage(Java.KEY).onlyOnFileType(Type.MAIN).name("CoberturaSensor");
+    descriptor.onlyOnLanguage(CoreProperties.CATEGORY_JAVA).onlyOnFileType(Type.MAIN).name("CoberturaSensor");
   }
 
   @Override
