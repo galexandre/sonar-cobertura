@@ -1,6 +1,6 @@
 /*
  * SonarQube Cobertura Plugin
- * Copyright (C) 2013-2016 SonarSource SA
+ * Copyright (C) 2018-2016 SonarSource SA
  * mailto:contact AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -22,6 +22,7 @@ package org.sonar.plugins.cobertura;
 import com.google.common.collect.Lists;
 import org.fest.assertions.Assertions;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.sonar.api.batch.sensor.SensorContext;
@@ -35,8 +36,9 @@ import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.measure.Metric;
 import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.batch.sensor.measure.NewMeasure;
-import org.sonar.api.config.MapSettings;
+import org.sonar.api.config.Configuration;
 import org.sonar.api.config.Settings;
+import org.sonar.api.config.internal.MapSettings;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.Measure;
 import org.sonar.api.resources.Project;
@@ -69,8 +71,8 @@ import static org.mockito.MockitoAnnotations.initMocks;
 public class CoberturaSensorTest {
 
   private CoberturaSensor sensor;
-
-  private Settings settings;
+  private Configuration configuration;
+  private MapSettings settings;
 
   @Mock
   private SensorContext context;
@@ -94,9 +96,9 @@ public class CoberturaSensorTest {
   @Before
   public void setUp() {
     initMocks(this);
-
+    configuration=new MapSettings().asConfig();
     settings = new MapSettings();
-    sensor = new CoberturaSensor(fs, pathResolver, settings, javaResourceLocator);
+    sensor = new CoberturaSensor(fs, pathResolver, settings, javaResourceLocator,configuration);
 
     when(context.fileSystem()).thenReturn(fs);
     when(fs.predicates()).thenReturn(predicates);
@@ -207,11 +209,12 @@ public class CoberturaSensorTest {
     verify(context, never()).newMeasure();
   }
 
+
   @Test
   public void javaInterfaceHasNoCoverage() throws URISyntaxException {
     sensor.parseReport(getCoverageReport(), context);
 
-    final InputFile interfaze = new DefaultInputFile("moduleKey", "org/apache/commons/chain/Chain");
+    //final InputFile interfaze = new DefaultInputFile("moduleKey", "org/apache/commons/chain/Chain");
 
 
     verify(newMeasure, never()).forMetric(CoreMetrics.COVERAGE);
@@ -225,7 +228,6 @@ public class CoberturaSensorTest {
     verify(newMeasure, never()).forMetric(CoreMetrics.UNCOVERED_CONDITIONS);
   }
 
-  //  @Ignore
   @Test
   public void shouldInsertCoverageAtFileLevel() throws URISyntaxException {
     File coverage = new File(getClass().getResource(
