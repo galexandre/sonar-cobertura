@@ -58,18 +58,20 @@ public class CoberturaTest {
     orchestrator.executeBuilds(build, analysis);
     Resource project = orchestrator.getServer().getWsClient().find(ResourceQuery.createForMetrics("com.sonarsource.it.samples:cobertura-example",
         "test_success_density", "test_failures", "test_errors", "tests", "skipped_tests", "test_execution_time", "coverage"));
-    if (!orchestrator.getConfiguration().getPluginVersion("cobertura").isGreaterThanOrEquals("1.6")) {
-      if (project!=null){
-        //no automatic import of surefire information since 1.6
-        assertThat(project.getMeasureIntValue("tests")).isEqualTo(2);
-        assertThat(project.getMeasureIntValue("test_failures")).isEqualTo(0);
-        assertThat(project.getMeasureIntValue("test_errors")).isEqualTo(0);
-        assertThat(project.getMeasureIntValue("skipped_tests")).isEqualTo(0);
-        assertThat(project.getMeasureIntValue("test_execution_time")).isGreaterThan(0);
-        assertThat(project.getMeasureValue("test_success_density")).isEqualTo(100.0);
-      }
+    if (project!=null){
+        if (!orchestrator.getConfiguration().getPluginVersion("cobertura").isGreaterThanOrEquals("1.6")) {
+
+            //no automatic import of surefire information since 1.6
+            assertThat(project.getMeasureIntValue("tests")).isEqualTo(2);
+            assertThat(project.getMeasureIntValue("test_failures")).isEqualTo(0);
+            assertThat(project.getMeasureIntValue("test_errors")).isEqualTo(0);
+            assertThat(project.getMeasureIntValue("skipped_tests")).isEqualTo(0);
+            assertThat(project.getMeasureIntValue("test_execution_time")).isGreaterThan(0);
+            assertThat(project.getMeasureValue("test_success_density")).isEqualTo(100.0);
+        }
+        assertThat(project.getMeasureValue("coverage")).isEqualTo(57.1, Delta.delta(0.1));
     }
-    assertThat(project.getMeasureValue("coverage")).isEqualTo(57.1, Delta.delta(0.1));
+
   }
 
 }
