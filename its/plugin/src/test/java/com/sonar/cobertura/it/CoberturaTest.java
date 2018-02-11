@@ -30,7 +30,7 @@ import org.sonar.wsclient.services.ResourceQuery;
 
 import java.io.File;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Assertions.*;
 
 public class CoberturaTest {
 
@@ -58,6 +58,7 @@ public class CoberturaTest {
     orchestrator.executeBuilds(build, analysis);
     Resource project = orchestrator.getServer().getWsClient().find(ResourceQuery.createForMetrics("com.sonarsource.it.samples:cobertura-example",
         "test_success_density", "test_failures", "test_errors", "tests", "skipped_tests", "test_execution_time", "coverage"));
+      assertNotNull(orchestrator.getServer().getUrl());
     if (project!=null){
         if (!orchestrator.getConfiguration().getPluginVersion("cobertura").isGreaterThanOrEquals("1.6")) {
 
