@@ -31,6 +31,7 @@ import org.sonar.wsclient.services.ResourceQuery;
 import java.io.File;
 
 import static org.fest.assertions.Assertions.*;
+import static org.junit.Assert.assertNotNull;
 
 public class CoberturaTest {
 
