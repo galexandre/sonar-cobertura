@@ -1,6 +1,6 @@
 /*
  * Cobertura :: Integration Tests
- * Copyright (C) 2009 SonarSource
+ * Copyright (C) 2018 SonarSource
  * dev@sonar.codehaus.org
  *
  * This program is free software; you can redistribute it and/or
@@ -20,26 +20,41 @@
 package com.sonar.cobertura.it;
 
 import com.sonar.orchestrator.Orchestrator;
+import com.sonar.orchestrator.build.BuildResult;
 import com.sonar.orchestrator.build.MavenBuild;
 import com.sonar.orchestrator.locator.FileLocation;
 import org.fest.assertions.Delta;
 import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.Test;
-import org.sonar.wsclient.services.Resource;
-import org.sonar.wsclient.services.ResourceQuery;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.sonar.wsclient.services.Measure;
+import org.sonarqube.qa.util.Tester;
+import org.sonarqube.ws.client.measure.ComponentWsRequest;
 
+import javax.annotation.CheckForNull;
 import java.io.File;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
-import static org.fest.assertions.Assertions.*;
-import static org.junit.Assert.assertNotNull;
+import static java.util.Arrays.asList;
+import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class CoberturaTest {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CoberturaTest.class);
 
   @ClassRule
   public static Orchestrator orchestrator = Orchestrator.builderEnv()
     .addPlugin("java")
     .addPlugin(FileLocation.of("../../target/sonar-cobertura-plugin.jar"))
     .build();
+
+    @Rule
+    public Tester tester=new Tester(orchestrator);
 
   @Test
   public void shouldReuseCoberturaAndSurefireReports() {
@@ -56,24 +71,47 @@ public class CoberturaTest {
     if (!orchestrator.getConfiguration().getPluginVersion("cobertura").isGreaterThan("1.6.2")) {
       analysis.setProperty("sonar.cobertura.reportPath", "target/site/cobertura/coverage.xml");
     }
-    orchestrator.executeBuilds(build, analysis);
-    Resource project = orchestrator.getServer().getWsClient().find(ResourceQuery.createForMetrics("com.sonarsource.it.samples:cobertura-example",
-        "test_success_density", "test_failures", "test_errors", "tests", "skipped_tests", "test_execution_time", "coverage"));
-      assertNotNull(orchestrator.getServer().getUrl());
-    if (project!=null){
+    BuildResult[] buildResult = orchestrator.executeBuilds(build, analysis);
+    for (int i = 0; i < buildResult.length; i++) {
+        assertTrue(buildResult[i].isSuccess());
+    }
+
+      Map<String, Measure> measureMap = getMeasures("com.sonarsource.it.samples:cobertura-example",
+              "test_success_density", "test_failures", "test_errors", "tests", "skipped_tests",
+              "test_execution_time", "coverage");
+
+    LOGGER.debug("mesureMap size: "+measureMap.size());
+    //Resource project = orchestrator.getServer().get(ResourceQuery.createForMetrics("com.sonarsource.it.samples:cobertura-example",
+    //    "test_success_density", "test_failures", "test_errors", "tests", "skipped_tests", "test_execution_time", "coverage"));
+    //  assertNotNull(orchestrator.getServer().getUrl());
+    if (measureMap!=null){
         if (!orchestrator.getConfiguration().getPluginVersion("cobertura").isGreaterThanOrEquals("1.6")) {
 
             //no automatic import of surefire information since 1.6
-            assertThat(project.getMeasureIntValue("tests")).isEqualTo(2);
-            assertThat(project.getMeasureIntValue("test_failures")).isEqualTo(0);
-            assertThat(project.getMeasureIntValue("test_errors")).isEqualTo(0);
-            assertThat(project.getMeasureIntValue("skipped_tests")).isEqualTo(0);
-            assertThat(project.getMeasureIntValue("test_execution_time")).isGreaterThan(0);
-            assertThat(project.getMeasureValue("test_success_density")).isEqualTo(100.0);
+            assertThat(measureMap.get("tests").getValue()).isEqualTo(2);
+            assertThat(measureMap.get("test_failures").getValue()).isEqualTo(0);
+            assertThat(measureMap.get("test_errors").getValue()).isEqualTo(0);
+            assertThat(measureMap.get("skipped_tests").getValue()).isEqualTo(0);
+            assertThat(measureMap.get("test_execution_time").getValue()).isGreaterThan(0);
+            assertThat(measureMap.get("test_success_density").getValue()).isEqualTo(100.0);
         }
-        assertThat(project.getMeasureValue("coverage")).isEqualTo(57.1, Delta.delta(0.1));
+        assertThat(measureMap.get("coverage").getValue()).isEqualTo(57.1, Delta.delta(0.1));
     }
 
   }
+
+
+
+    @CheckForNull
+    Map<String,Measure> getMeasures(String componentKey, String... metricKey) {
+
+        return tester.wsClient().measures().
+                component(new ComponentWsRequest()
+                        .setComponentKey(componentKey)
+                        .setMetricKeys(asList(metricKey)))
+                        .getComponent().getMeasuresList()
+                        .stream()
+                        .collect(Collectors.toMap(Measure::getMetric, Function.identity()));
+    }
 
 }
