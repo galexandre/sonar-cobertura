@@ -52,8 +52,8 @@ public class CoberturaTest {
             .addPlugin(FileLocation.of("../../target/sonar-cobertura-plugin.jar"))
             .build();
 
-       @Rule
-       public Tester tester=new Tester(orchestrator);
+       //@Rule
+       //public Tester tester=new Tester(orchestrator);
 
   @Test
   public void shouldReuseCoberturaAndSurefireReports() {
