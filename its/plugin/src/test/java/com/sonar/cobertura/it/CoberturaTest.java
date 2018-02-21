@@ -48,15 +48,15 @@ public class CoberturaTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CoberturaTest.class);
 
-  @ClassRule
-  public static Orchestrator orchestrator = Orchestrator.builderEnv()
-          .addPlugin("java")
-          .addPlugin(FileLocation.of("../../target/sonar-cobertura-plugin.jar"))
-          .build();
+    /* @ClassRule
+     public static Orchestrator orchestrator = Orchestrator.builderEnv()
+             .addPlugin("java")
+             .addPlugin(FileLocation.of("../../target/sonar-cobertura-plugin.jar"))
+             .build();
 
-    @Rule
-    public Tester tester=new Tester(orchestrator);
-
+       @Rule
+       public Tester tester=new Tester(orchestrator);
+   */
   @Test
   public void shouldReuseCoberturaAndSurefireReports() {
       assertTrue(true);
