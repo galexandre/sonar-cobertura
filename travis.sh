@@ -8,7 +8,7 @@ function installTravisTools {
   source ~/.local/bin/install
 }
 
-configureTravis
+installTravisTools
 . ~/.local/bin/installMaven35
 case "$TEST" in
 
@@ -17,7 +17,7 @@ ci)
   ;;
 
 plugin)
-  installTravisTools
+
 
   mvn package -T2 -Dsource.skip=true -Denforcer.skip=true -Danimal.sniffer.skip=true -Dmaven.test.skip=true
 
