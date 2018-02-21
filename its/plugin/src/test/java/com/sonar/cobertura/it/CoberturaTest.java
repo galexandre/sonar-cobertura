@@ -45,18 +45,16 @@ import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class CoberturaTest {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(CoberturaTest.class);
-
-    /* @ClassRule
+    @ClassRule
      public static Orchestrator orchestrator = Orchestrator.builderEnv()
-             .addPlugin("java")
-             .addPlugin(FileLocation.of("../../target/sonar-cobertura-plugin.jar"))
-             .build();
+            .addPlugin("java")
+            .addPlugin(FileLocation.of("../../target/sonar-cobertura-plugin.jar"))
+            .build();
 
        @Rule
        public Tester tester=new Tester(orchestrator);
-   */
+
   @Test
   public void shouldReuseCoberturaAndSurefireReports() {
       assertTrue(true);
