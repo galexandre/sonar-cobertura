@@ -23,13 +23,10 @@ import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.BuildResult;
 import com.sonar.orchestrator.build.MavenBuild;
 import com.sonar.orchestrator.locator.FileLocation;
-import org.fest.assertions.Delta;
 import org.junit.ClassRule;
-import org.junit.Rule;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sonarqube.qa.util.Tester;
 import org.sonarqube.ws.WsMeasures;
 import org.sonarqube.ws.client.measure.ComponentWsRequest;
 
@@ -37,11 +34,11 @@ import javax.annotation.CheckForNull;
 import java.io.File;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
 import static org.fest.assertions.Assertions.assertThat;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 public class CoberturaTest {
@@ -53,38 +50,38 @@ public class CoberturaTest {
             .build();
 
        //@Rule
-       //public Tester tester=new Tester(orchestrator);
+       //public Tester tester=new Tester(orchestrator); --> issue!!!
 
   @Test
   public void shouldReuseCoberturaAndSurefireReports() {
       assertTrue(true);
-      //MavenBuild build = MavenBuild.create(new File("projects/cobertura-example/pom.xml"));
-      //if (orchestrator.getConfiguration().getPluginVersion("cobertura").isGreaterThanOrEquals("1.6")) {
-      //    build.setProperty("cobertura.report.format", "xml").setGoals("clean", "cobertura:cobertura", "install"); // cobertura and surefire are NOT executed during build
-      //} else {
-      //    build.setGoals("clean", "install"); // cobertura and surefire are executed during build
-      //}
-     // MavenBuild analysis = MavenBuild.create(new File("projects/cobertura-example/pom.xml"))
-     //         // Do not clean to reuse reports
-     //         .setGoals("sonar:sonar")
-     //         .setProperty("sonar.java.coveragePlugin", "cobertura"); //set this property for java versions 2.1 and prior.
-     // if (!orchestrator.getConfiguration().getPluginVersion("cobertura").isGreaterThan("1.6.2")) {
-      //    analysis.setProperty("sonar.cobertura.reportPath", "target/site/cobertura/coverage.xml");
-      //}
-      //BuildResult[] buildResult = orchestrator.executeBuilds(build, analysis);
-      //for (int i = 0; i < buildResult.length; i++) {
-      //    assertTrue(buildResult[i].isSuccess());
-      //}
+      MavenBuild build = MavenBuild.create(new File("projects/cobertura-example/pom.xml"));
+      if (orchestrator.getConfiguration().getPluginVersion("cobertura").isGreaterThanOrEquals("1.6")) {
+          build.setProperty("cobertura.report.format", "xml").setGoals("clean", "cobertura:cobertura", "install"); // cobertura and surefire are NOT executed during build
+      } else {
+          build.setGoals("clean", "install"); // cobertura and surefire are executed during build
+      }
+      MavenBuild analysis = MavenBuild.create(new File("projects/cobertura-example/pom.xml"))
+              // Do not clean to reuse reports
+              .setGoals("sonar:sonar")
+              .setProperty("sonar.java.coveragePlugin", "cobertura"); //set this property for java versions 2.1 and prior.
+      if (!orchestrator.getConfiguration().getPluginVersion("cobertura").isGreaterThan("1.6.2")) {
+         analysis.setProperty("sonar.cobertura.reportPath", "target/site/cobertura/coverage.xml");
+      }
+      BuildResult[] buildResult = orchestrator.executeBuilds(build, analysis);
+      for (int i = 0; i < buildResult.length; i++) {
+          assertTrue(buildResult[i].isSuccess());
+      }
 
-      //Map<String, WsMeasures.Measure> measureMap = getMeasures("com.sonarsource.it.samples:cobertura-example",
-      //       "test_success_density", "test_failures", "test_errors", "tests", "skipped_tests",
-      //      "test_execution_time", "coverage");
+      Map<String, WsMeasures.Measure> measureMap = getMeasures("com.sonarsource.it.samples:cobertura-example",
+             "test_success_density", "test_failures", "test_errors", "tests", "skipped_tests",
+            "test_execution_time", "coverage");
 
-      //LOGGER.debug("mesureMap size: "+measureMap.size());
+      LOGGER.debug("mesureMap size: "+measureMap.size());
       //Resource project = orchestrator.getServer().get(ResourceQuery.createForMetrics("com.sonarsource.it.samples:cobertura-example",
-      //    "test_success_density", "test_failures", "test_errors", "tests", "skipped_tests", "test_execution_time", "coverage"));
-      //  assertNotNull(orchestrator.getServer().getUrl());
-    /*if (measureMap!=null){
+       //   "test_success_density", "test_failures", "test_errors", "tests", "skipped_tests", "test_execution_time", "coverage"));
+        assertNotNull(orchestrator.getServer().getUrl());
+      if (measureMap!=null){
         if (!orchestrator.getConfiguration().getPluginVersion("cobertura").isGreaterThanOrEquals("1.6")) {
 
             //no automatic import of surefire information since 1.6
@@ -99,20 +96,18 @@ public class CoberturaTest {
         //assertThat(Float.parseFloat(measureMap.get("coverage").getValue())).isEqualTo(57.1, Delta.delta(0.1));
     }
 
-  }*/
+  }
 
 
 
-    /*@CheckForNull
+    @CheckForNull
     Map<String,WsMeasures.Measure> getMeasures(String componentKey, String... metricKey) {
-
-        return tester.wsClient().measures().component(new ComponentWsRequest()
-                .setComponentKey(componentKey)
-                .setMetricKeys(asList(metricKey)))
-                .getComponent()
-                .getMeasuresList()
-                .stream()
-                .collect(Collectors.toMap(WsMeasures.Measure::getMetric, Function.identity()));
-    }*/
+      return TestUtils.newWsClient(orchestrator).measures().component(new ComponentWsRequest()
+              .setComponentKey(componentKey)
+              .setMetricKeys(asList(metricKey)))
+              .getComponent()
+              .getMeasuresList()
+              .stream()
+              .collect(Collectors.toMap(WsMeasures.Measure::getMetric, Function.identity()));
   }
 }
