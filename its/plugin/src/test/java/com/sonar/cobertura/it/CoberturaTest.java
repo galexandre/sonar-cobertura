@@ -49,9 +49,6 @@ public class CoberturaTest {
             .addPlugin(FileLocation.of("../../target/sonar-cobertura-plugin.jar"))
             .build();
 
-       //@Rule
-       //public Tester tester=new Tester(orchestrator); --> issue!!!
-
   @Test
   public void shouldReuseCoberturaAndSurefireReports() {
       assertTrue(true);
@@ -78,12 +75,9 @@ public class CoberturaTest {
             "test_execution_time", "coverage");
 
       LOGGER.debug("mesureMap size: "+measureMap.size());
-      //Resource project = orchestrator.getServer().get(ResourceQuery.createForMetrics("com.sonarsource.it.samples:cobertura-example",
-       //   "test_success_density", "test_failures", "test_errors", "tests", "skipped_tests", "test_execution_time", "coverage"));
-        assertNotNull(orchestrator.getServer().getUrl());
+      assertNotNull(orchestrator.getServer().getUrl());
       if (measureMap!=null){
         if (!orchestrator.getConfiguration().getPluginVersion("cobertura").isGreaterThanOrEquals("1.6")) {
-
             //no automatic import of surefire information since 1.6
             assertThat(Integer.parseInt(measureMap.get("tests").getValue())).isEqualTo(2);
             assertThat(Integer.parseInt(measureMap.get("test_failures").getValue())).isEqualTo(0);
@@ -93,13 +87,10 @@ public class CoberturaTest {
             assertThat(Double.parseDouble(measureMap.get("test_success_density").getValue())).isEqualTo(100.0);
         }
         LOGGER.debug("Coverage result:"+measureMap.get("coverage").getValue());
-        //assertThat(Float.parseFloat(measureMap.get("coverage").getValue())).isEqualTo(57.1, Delta.delta(0.1));
+        assertThat(Float.parseFloat(measureMap.get("coverage").getValue())).isEqualTo(57.1, Delta.delta(0.1));
     }
 
   }
-
-
-
     @CheckForNull
     Map<String,WsMeasures.Measure> getMeasures(String componentKey, String... metricKey) {
       return TestUtils.newWsClient(orchestrator).measures().component(new ComponentWsRequest()
