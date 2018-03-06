@@ -57,7 +57,7 @@ public class CoberturaTest {
       if (orchestrator.getConfiguration().getPluginVersion("cobertura").isGreaterThanOrEquals("1.6")) {
           build.setProperty("cobertura.report.format", "xml").setGoals("clean", "cobertura:cobertura", "install"); // cobertura and surefire are NOT executed during build
       } else {
-          build.setGoals("clean", "install"); // cobertura and surefire are executed during build
+          build.setGoals("clean", "cobertura:cobertura install"); // cobertura and surefire are executed during build
       }
       MavenBuild analysis = MavenBuild.create(new File("projects/cobertura-example/pom.xml"))
               // Do not clean to reuse reports
@@ -88,7 +88,7 @@ public class CoberturaTest {
             assertThat(Integer.parseInt(measureMap.get("test_execution_time").getValue())).isGreaterThan(0);
             assertThat(Double.parseDouble(measureMap.get("test_success_density").getValue())).isEqualTo(100.0);
         }
-        assertThat(Float.parseFloat(measureMap.get("coverage").getValue())).isEqualTo((float) 57.14285714285714);
+        assertThat(Double.parseDouble(measureMap.get("coverage").getValue())).isEqualTo(57.14285714285714);
     }
 
   }
