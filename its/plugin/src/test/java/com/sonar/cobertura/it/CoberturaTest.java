@@ -23,6 +23,7 @@ import com.sonar.orchestrator.Orchestrator;
 import com.sonar.orchestrator.build.BuildResult;
 import com.sonar.orchestrator.build.MavenBuild;
 import com.sonar.orchestrator.locator.FileLocation;
+import org.fest.assertions.Delta;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -87,7 +88,7 @@ public class CoberturaTest {
             assertThat(Double.parseDouble(measureMap.get("test_success_density").getValue())).isEqualTo(100.0);
         }
         LOGGER.debug("Coverage result:"+measureMap.get("coverage").getValue());
-        assertThat(Float.parseFloat(measureMap.get("coverage").getValue())).isEqualTo(57.1, Delta.delta(0.1));
+        assertThat(Float.parseFloat(measureMap.get("coverage").getValue())).isEqualTo((float) 57.1, Delta.delta(0.1));
     }
 
   }
