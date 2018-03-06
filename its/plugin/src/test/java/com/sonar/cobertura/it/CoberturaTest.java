@@ -57,7 +57,7 @@ public class CoberturaTest {
       if (orchestrator.getConfiguration().getPluginVersion("cobertura").isGreaterThanOrEquals("1.6")) {
           build.setProperty("cobertura.report.format", "xml").setGoals("clean", "cobertura:cobertura", "install"); // cobertura and surefire are NOT executed during build
       } else {
-          build.setGoals("clean", "cobertura:cobertura install"); // cobertura and surefire are executed during build
+          build.setProperty("cobertura.report.format", "xml").setGoals("clean", "cobertura:cobertura", "install"); // cobertura and surefire are executed during build
       }
       MavenBuild analysis = MavenBuild.create(new File("projects/cobertura-example/pom.xml"))
               // Do not clean to reuse reports
