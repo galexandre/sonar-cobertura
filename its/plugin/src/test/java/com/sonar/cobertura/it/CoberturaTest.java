@@ -55,17 +55,17 @@ public class CoberturaTest {
       assertTrue(true);
       MavenBuild build = MavenBuild.create(new File("projects/cobertura-example/pom.xml"));
       if (orchestrator.getConfiguration().getPluginVersion("cobertura").isGreaterThanOrEquals("1.6")) {
-          build.setProperty("cobertura.report.format", "xml").setGoals("clean", "cobertura:cobertura", "install"); // cobertura and surefire are NOT executed during build
+          build.setProperty("cobertura.report.format", "xml").setGoals("clean", "install", "cobertura:cobertura"); // cobertura and surefire are NOT executed during build
       } else {
-          build.setProperty("cobertura.report.format", "xml").setGoals("clean", "cobertura:cobertura", "install"); // cobertura and surefire are executed during build
+          build.setProperty("cobertura.report.format", "xml").setGoals("clean", "install", "cobertura:cobertura"); // cobertura and surefire are executed during build
       }
       MavenBuild analysis = MavenBuild.create(new File("projects/cobertura-example/pom.xml"))
               // Do not clean to reuse reports
               .setGoals("sonar:sonar")
               .setProperty("sonar.java.coveragePlugin", "cobertura"); //set this property for java versions 2.1 and prior.
-      if (!orchestrator.getConfiguration().getPluginVersion("cobertura").isGreaterThan("1.6.2")) {
+      //if (!orchestrator.getConfiguration().getPluginVersion("cobertura").isGreaterThan("1.6.2")) {
          analysis.setProperty("sonar.cobertura.reportPath", "target/site/cobertura/coverage.xml");
-      }
+      //}
       BuildResult[] buildResult = orchestrator.executeBuilds(build, analysis);
       for (int i = 0; i < buildResult.length; i++) {
           assertTrue(buildResult[i].isSuccess());
