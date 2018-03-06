@@ -77,6 +77,7 @@ public class CoberturaTest {
 
       LOGGER.debug("mesureMap size: "+measureMap.size());
       assertNotNull(orchestrator.getServer().getUrl());
+      assertNotNull(measureMap);
       if (measureMap!=null){
         if (!orchestrator.getConfiguration().getPluginVersion("cobertura").isGreaterThanOrEquals("1.6")) {
             //no automatic import of surefire information since 1.6
