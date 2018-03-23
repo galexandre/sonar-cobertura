@@ -19,45 +19,24 @@
  */
 package org.sonar.plugins.cobertura;
 
-import com.google.common.collect.Lists;
-import org.fest.assertions.Assertions;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.sonar.api.batch.sensor.SensorContext;
-import org.sonar.api.batch.fs.FilePredicate;
-import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
-import org.sonar.api.batch.fs.InputComponent;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.InputFile.Type;
-import org.sonar.api.batch.fs.internal.DefaultInputFile;
-import org.sonar.api.batch.measure.Metric;
 import org.sonar.api.batch.sensor.SensorDescriptor;
-import org.sonar.api.batch.sensor.measure.NewMeasure;
 import org.sonar.api.config.MapSettings;
 import org.sonar.api.config.Settings;
-import org.sonar.api.measures.CoreMetrics;
-import org.sonar.api.measures.Measure;
-import org.sonar.api.resources.Project;
-import org.sonar.api.resources.Qualifiers;
-import org.sonar.api.resources.Resource;
-import org.sonar.api.resources.Scopes;
 import org.sonar.api.scan.filesystem.PathResolver;
-import org.sonar.api.test.IsMeasure;
-import org.sonar.api.test.IsResource;
 import org.sonar.plugins.java.api.JavaResourceLocator;
 
 import java.io.File;
-import java.io.Serializable;
 import java.net.URISyntaxException;
 
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyDouble;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.argThat;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -65,6 +44,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
+import org.sonar.api.batch.fs.FilePredicate;
+import org.sonar.api.batch.fs.FilePredicates;
+import org.sonar.api.batch.sensor.coverage.NewCoverage;
+import org.sonar.plugins.java.Java;
 
 public class CoberturaSensorTest {
 
@@ -89,7 +72,7 @@ public class CoberturaSensorTest {
   @Mock
   private FilePredicate predicate;
   @Mock
-  private NewMeasure newMeasure;
+  private NewCoverage newCoverage;
 
   @Before
   public void setUp() {
@@ -104,10 +87,7 @@ public class CoberturaSensorTest {
     when(predicates.is(file)).thenReturn(predicate);
     when(fs.inputFile(predicate)).thenReturn(inputFile);
 
-    when(context.newMeasure()).thenReturn(newMeasure);
-    when(newMeasure.forMetric(any(Metric.class))).thenReturn(newMeasure);
-    when(newMeasure.on(any(InputComponent.class))).thenReturn(newMeasure);
-    when(newMeasure.withValue(any())).thenReturn(newMeasure);
+    when(context.newCoverage()).thenReturn(newCoverage);
   }
 
   @Test
@@ -127,62 +107,15 @@ public class CoberturaSensorTest {
   }
 
   @Test
-  public void doNotCollectProjectCoverage() throws URISyntaxException {
-    sensor.parseReport(getCoverageReport(), context);
-
-    verify(newMeasure, never()).forMetric(CoreMetrics.COVERAGE);
-  }
-
-  @Test
-  public void doNotCollectProjectLineCoverage() throws URISyntaxException {
-    sensor.parseReport(getCoverageReport(), context);
-
-    verify(newMeasure, never()).forMetric(CoreMetrics.LINE_COVERAGE);
-    verify(newMeasure, never()).forMetric(CoreMetrics.COVERAGE_LINE_HITS_DATA);
-  }
-
-  @Test
-  public void doNotCollectProjectBranchCoverage() throws URISyntaxException {
-    sensor.parseReport(getCoverageReport(), context);
-
-    verify(newMeasure, never()).forMetric(CoreMetrics.BRANCH_COVERAGE);
-  }
-
-  @Test
-  public void collectPackageLineCoverage() throws URISyntaxException {
-    sensor.parseReport(getCoverageReport(), context);
-
-    verify(newMeasure, never()).forMetric(CoreMetrics.LINE_COVERAGE);
-    verify(newMeasure, never()).forMetric(CoreMetrics.UNCOVERED_LINES);
-  }
-
-  @Test
-  public void collectPackageBranchCoverage() throws URISyntaxException {
-    sensor.parseReport(getCoverageReport(), context);
-
-    verify(newMeasure, never()).forMetric(CoreMetrics.BRANCH_COVERAGE);
-    verify(newMeasure, never()).forMetric(CoreMetrics.UNCOVERED_CONDITIONS);
-  }
-
-  @Test
-  public void packageCoverageIsCalculatedLaterByDecorator() throws URISyntaxException {
-    sensor.parseReport(getCoverageReport(), context);
-
-    verify(newMeasure, never()).forMetric(CoreMetrics.COVERAGE);
-  }
-
-  @Test
   public void collectFileLineCoverage() throws URISyntaxException {
     when(javaResourceLocator.findResourceByClassName("org.apache.commons.chain.config.ConfigParser")).thenReturn(inputFile);
     sensor.parseReport(getCoverageReport(), context);
 
-    verify(context, atLeast(2)).newMeasure();
-    verify(newMeasure, atLeast(2)).on(inputFile);
-    verify(newMeasure).forMetric(CoreMetrics.LINES_TO_COVER);
-    verify(newMeasure).forMetric(CoreMetrics.UNCOVERED_LINES);
-    verify(newMeasure).withValue(30);
-    verify(newMeasure).withValue(5);
-    verify(newMeasure, atLeast(2)).save();
+    verify(context, times(1)).newCoverage();
+    verify(newCoverage, times(1)).onFile(inputFile);
+    verify(newCoverage).lineHits(162,27);
+    verify(newCoverage).lineHits(77,60);
+    verify(newCoverage, times(1)).save();
   }
 
   @Test
@@ -190,42 +123,31 @@ public class CoberturaSensorTest {
     when(javaResourceLocator.findResourceByClassName("org.apache.commons.chain.config.ConfigParser")).thenReturn(inputFile);
     sensor.parseReport(getCoverageReport(), context);
 
-    verify(context, atLeast(2)).newMeasure();
-    verify(newMeasure, atLeast(2)).on(inputFile);
-    verify(newMeasure).forMetric(CoreMetrics.CONDITIONS_TO_COVER);
-    verify(newMeasure).forMetric(CoreMetrics.UNCOVERED_CONDITIONS);
-    verify(newMeasure).withValue(30);
-    verify(newMeasure).withValue(5);
-    verify(newMeasure, atLeast(2)).save();
+    verify(context, times(1)).newCoverage();
+    verify(newCoverage, times(1)).onFile(inputFile);
+    verify(newCoverage).conditions(73, 2, 1);
+    verify(newCoverage).conditions(93, 2, 2);
+    verify(newCoverage, times(1)).save();
   }
 
   @Test
   public void testDoNotSaveMeasureOnResourceWhichDoesntExistInTheContext() throws URISyntaxException {
-      when(fs.inputFile(predicate)).thenReturn(null);
+    when(fs.inputFile(predicate)).thenReturn(null);
     sensor.parseReport(getCoverageReport(), context);
 
-    verify(context, never()).newMeasure();
+    verify(context, never()).newCoverage();
   }
 
   @Test
-  public void javaInterfaceHasNoCoverage() throws URISyntaxException {
+  public void javaInterfaceHasNoCoverageSoAddedAFakeOneToShowAsCovered() throws URISyntaxException {
+    when(javaResourceLocator.findResourceByClassName("org.apache.commons.chain.Chain")).thenReturn(inputFile);    
     sensor.parseReport(getCoverageReport(), context);
 
-    final InputFile interfaze = new DefaultInputFile("moduleKey", "org/apache/commons/chain/Chain");
-
-
-    verify(newMeasure, never()).forMetric(CoreMetrics.COVERAGE);
-
-    verify(newMeasure, never()).forMetric(CoreMetrics.LINE_COVERAGE);
-    verify(newMeasure, never()).forMetric(CoreMetrics.LINES_TO_COVER);
-    verify(newMeasure, never()).forMetric(CoreMetrics.UNCOVERED_LINES);
-
-    verify(newMeasure, never()).forMetric(CoreMetrics.BRANCH_COVERAGE);
-    verify(newMeasure, never()).forMetric(CoreMetrics.CONDITIONS_TO_COVER);
-    verify(newMeasure, never()).forMetric(CoreMetrics.UNCOVERED_CONDITIONS);
+    verify(newCoverage, times(1)).onFile(inputFile);
+    verify(newCoverage).lineHits(1,1);
+    verify(newCoverage, times(1)).save();
   }
 
-  //  @Ignore
   @Test
   public void shouldInsertCoverageAtFileLevel() throws URISyntaxException {
     File coverage = new File(getClass().getResource(
@@ -236,26 +158,66 @@ public class CoberturaSensorTest {
 
     sensor.parseReport(coverage, context);
 
-    verify(newMeasure, times(7)).on(inputFile);
-    
-    verify(newMeasure).forMetric(CoreMetrics.LINES_TO_COVER);
-    verify(newMeasure).withValue(35);
-    verify(newMeasure).forMetric(CoreMetrics.UNCOVERED_LINES);
-    verify(newMeasure).withValue(22);
-    verify(newMeasure).forMetric(CoreMetrics.CONDITIONS_TO_COVER);
-    verify(newMeasure).withValue(4);
-    verify(newMeasure).forMetric(CoreMetrics.UNCOVERED_CONDITIONS);
-    verify(newMeasure).withValue(3);
-    verify(newMeasure).forMetric(CoreMetrics.COVERAGE_LINE_HITS_DATA);
-    verify(newMeasure).withValue("22=2;25=0;26=0;29=0;30=0;31=0;34=1;35=1;36=1;37=0;39=1;41=1;44=2;46=1;47=1;50=0;51=0;52=0;53=0;55=0;57=0;60=0;61=0;64=1;71=1;73=1;76=0;77=0;80=0;81=0;85=0;87=0;91=0;93=0;96=1");
-    verify(newMeasure).forMetric(CoreMetrics.CONDITIONS_BY_LINE);
-    verify(newMeasure).withValue("36=2;52=2");
-    verify(newMeasure).forMetric(CoreMetrics.COVERED_CONDITIONS_BY_LINE);
-    verify(newMeasure).withValue("36=1;52=0");
-    
-    verify(newMeasure, times(7)).save();
+    verify(newCoverage, times(3)).onFile(inputFile);
 
-    verifyNoMoreInteractions(newMeasure);
+    verify(newCoverage).lineHits(22,2);
+    verify(newCoverage).lineHits(44,2);
+
+    verify(newCoverage).lineHits(25,0);
+    verify(newCoverage).lineHits(26,0);
+
+    verify(newCoverage).lineHits(34,1);
+    verify(newCoverage).lineHits(35,1);
+    verify(newCoverage).lineHits(36,1);
+    verify(newCoverage).conditions(36, 2, 1);
+
+    verify(newCoverage).lineHits(37,0);
+    verify(newCoverage).lineHits(39,1);
+    verify(newCoverage).lineHits(41,1);
+
+    verify(newCoverage).lineHits(29,0);
+    verify(newCoverage).lineHits(30,0);
+    verify(newCoverage).lineHits(31,0);
+
+
+    verify(newCoverage).lineHits(46,1);
+    verify(newCoverage).lineHits(47,1);
+
+    verify(newCoverage).lineHits(50,0);
+    verify(newCoverage).lineHits(51,0);
+    verify(newCoverage).lineHits(52,0);
+    verify(newCoverage).conditions(52, 2, 0);
+
+    verify(newCoverage).lineHits(53,0);
+    verify(newCoverage).lineHits(55,0);
+    verify(newCoverage).lineHits(57,0);
+
+
+    verify(newCoverage).lineHits(60,0);
+    verify(newCoverage).lineHits(61,0);
+    verify(newCoverage).lineHits(64,1);
+
+
+    verify(newCoverage).lineHits(71,1);
+    verify(newCoverage).lineHits(73,1);
+
+    verify(newCoverage).lineHits(85,0);
+    verify(newCoverage).lineHits(87,0);
+
+    verify(newCoverage).lineHits(80,0);
+    verify(newCoverage).lineHits(81,0);
+
+    verify(newCoverage).lineHits(91,0);
+    verify(newCoverage).lineHits(93,0);
+
+    verify(newCoverage).lineHits(76,0);
+    verify(newCoverage).lineHits(77,0);
+
+    verify(newCoverage).lineHits(96,1);
+
+    verify(newCoverage, times(3)).save();
+
+    verifyNoMoreInteractions(newCoverage);
   }
 
   @Test
@@ -263,19 +225,55 @@ public class CoberturaSensorTest {
     when(javaResourceLocator.findResourceByClassName("org.apache.commons.chain.impl.CatalogBase")).thenReturn(inputFile);
     sensor.parseReport(getCoverageReport(), context);
 
-    verify(newMeasure).forMetric(CoreMetrics.COVERAGE_LINE_HITS_DATA);
-    verify(newMeasure).withValue("48=117;56=234;66=0;67=0;68=0;84=999;86=999;98=318;111=18;121=0;122=0;125=0;126=0;127=0;128=0;131=0;133=0");
+    verify(newCoverage, times(1)).onFile(inputFile);
+    verify(newCoverage).lineHits(56,234);
+
+    verify(newCoverage).lineHits(48,117);
+    verify(newCoverage).lineHits(66,0);
+    verify(newCoverage).lineHits(67,0);
+    verify(newCoverage).lineHits(68,0);
+
+    verify(newCoverage).lineHits(84,999);
+    verify(newCoverage).lineHits(86,999);
+
+    verify(newCoverage).lineHits(98,318);
+
+    verify(newCoverage).lineHits(111,18);
+    
+    verify(newCoverage).lineHits(121,0);
+    verify(newCoverage).lineHits(122,0);
+    verify(newCoverage).lineHits(125,0);
+    verify(newCoverage).conditions(125, 2, 0);
+
+    verify(newCoverage).lineHits(126,0);
+    verify(newCoverage).lineHits(127,0);
+    verify(newCoverage).conditions(127, 2, 0);
+    verify(newCoverage).lineHits(128,0);
+    verify(newCoverage).lineHits(131,0);
+    verify(newCoverage).lineHits(133,0);
+
+    verify(newCoverage, times(1)).save();
+
+    verifyNoMoreInteractions(newCoverage);
   }
 
   @Test
-  public void shouldNotCountTwiceAnonymousClasses() throws URISyntaxException {
+  public void countsLineNumbersGloballyEvenAnonymousClasses() throws URISyntaxException {
     File coverage = new File(getClass().getResource("/org/sonar/plugins/cobertura/CoberturaSensorTest/shouldNotCountTwiceAnonymousClasses.xml").toURI());
     when(javaResourceLocator.findResourceByClassName("org.sonar.samples.MyFile")).thenReturn(inputFile);
     sensor.parseReport(coverage, context);
 
-    verify(newMeasure, atLeast(1)).on(inputFile);
-    verify(newMeasure).forMetric(CoreMetrics.LINES_TO_COVER);
-    verify(newMeasure).withValue(5); // do not count line 26 twice
+    verify(newCoverage, times(2)).onFile(inputFile);
+    verify(newCoverage).lineHits(22,2);
+    verify(newCoverage).lineHits(25,0);
+    verify(newCoverage, times(2)).lineHits(26,0);
+    verify(newCoverage).lineHits(27,0);
+    verify(newCoverage).lineHits(28,0);
+
+    verify(newCoverage, times(2)).save();
+
+    verifyNoMoreInteractions(newCoverage);
+
   }
 
   private File getCoverageReport() throws URISyntaxException {
@@ -289,7 +287,7 @@ public class CoberturaSensorTest {
     when(descriptor.onlyOnFileType(any(Type.class))).thenReturn(descriptor);
     sensor.describe(descriptor );
     
-    verify(descriptor).onlyOnLanguage("java");
+    verify(descriptor).onlyOnLanguage(Java.KEY);
     verify(descriptor).onlyOnFileType(Type.MAIN);
     verify(descriptor).name("CoberturaSensor");
     verifyNoMoreInteractions(descriptor);
