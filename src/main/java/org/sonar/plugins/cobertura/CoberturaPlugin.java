@@ -20,29 +20,33 @@
 package org.sonar.plugins.cobertura;
 
 import com.google.common.collect.ImmutableList;
+import org.sonar.api.CoreProperties;
 import org.sonar.api.Plugin;
 import org.sonar.api.config.PropertyDefinition;
 import org.sonar.api.resources.Qualifiers;
-import org.sonar.java.JavaConstants;
 
-/**
- *
- */
+import java.util.List;
+
 public final class CoberturaPlugin implements Plugin{
 
   public static final String COBERTURA_REPORT_PATH_PROPERTY = "sonar.cobertura.reportPath";
-  private ImmutableList.Builder<Object> builder;
+
+  public List<Object> getExtensions() {
+    return ImmutableList.of(
+            PropertyDefinition.builder(COBERTURA_REPORT_PATH_PROPERTY)
+                    .category(CoreProperties.CATEGORY_CODE_COVERAGE)
+                    .subCategory("Cobertura")
+                    .name("Report path")
+                    .description("Path (absolute or relative) to Cobertura xml report file.")
+                    .defaultValue("target/site/cobertura/coverage.xml")
+                    .onQualifiers(Qualifiers.PROJECT)
+                    .build(),
+
+            CoberturaSensor.class);
+  }
 
   @Override
   public void define(Context context) {
-    builder = ImmutableList.builder();
-    builder.add(PropertyDefinition.builder(COBERTURA_REPORT_PATH_PROPERTY)
-            .category(JavaConstants.JAVA_CATEGORY)
-            .subCategory("Cobertura")
-            .name("Report path")
-            .description("Path (absolute or relative) to Cobertura xml report file.")
-            .defaultValue("target/site/cobertura/coverage.xml")
-            .onQualifiers(Qualifiers.PROJECT));
-    context.addExtension(builder.build());
+    context.addExtensions(getExtensions());
   }
 }

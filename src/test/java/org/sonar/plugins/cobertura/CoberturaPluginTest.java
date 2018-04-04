@@ -39,6 +39,6 @@ public class CoberturaPluginTest {
         SonarRuntime sonarRuntime = SonarRuntimeImpl.forSonarQube(VERSION_6_7, SonarQubeSide.SERVER);
         Plugin.Context context = new Plugin.Context(sonarRuntime);
         coberturaPlugin.define(context);
-        assertThat(context.getExtensions()).hasSize(1);
+        assertThat(context.getExtensions()).hasSize(2);
     }
 }
