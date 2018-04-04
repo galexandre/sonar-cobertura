@@ -88,7 +88,7 @@ public class CoberturaTest {
             assertThat(Integer.parseInt(measureMap.get("test_execution_time").getValue())).isGreaterThan(0);
             assertThat(Double.parseDouble(measureMap.get("test_success_density").getValue())).isEqualTo(100.0);
         }
-        assertThat(Double.parseDouble(measureMap.get("coverage").getValue())).isEqualTo(57.14285714285714);
+        assertThat(Double.parseDouble(measureMap.get("coverage").getValue())).isEqualTo(57.1);
     }
 
   }
