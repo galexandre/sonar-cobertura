@@ -10,6 +10,7 @@ env:
   matrix:
   - TEST=ci
   - TEST=plugin SQ_VERSION=6.7
+  - TEST=plugin SQ_VERSION=7.0
 
 matrix:
   fast_finish: true
