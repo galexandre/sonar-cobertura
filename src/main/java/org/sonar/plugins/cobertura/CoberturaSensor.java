@@ -1,6 +1,6 @@
 /*
  * SonarQube Cobertura Plugin
- * Copyright (C) 2013-2016 SonarSource SA
+ * Copyright (C) 2018-2016 SonarSource SA
  * mailto:contact AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -26,6 +26,7 @@ import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile.Type;
+import org.sonar.api.config.Configuration;
 import org.sonar.api.config.Settings;
 import org.sonar.api.scan.filesystem.PathResolver;
 import org.sonar.plugins.java.Java;
@@ -39,13 +40,14 @@ public class CoberturaSensor implements Sensor {
 
   private FileSystem fs;
   private PathResolver pathResolver;
-  private Settings settings;
+  private final Configuration configuration;
   private final JavaResourceLocator javaResourceLocator;
 
-  public CoberturaSensor(FileSystem fs, PathResolver pathResolver, Settings settings, JavaResourceLocator javaResourceLocator) {
+  public CoberturaSensor(FileSystem fs, PathResolver pathResolver, Settings settings,
+                         JavaResourceLocator javaResourceLocator, Configuration configuration) {
     this.fs = fs;
     this.pathResolver = pathResolver;
-    this.settings = settings;
+    this.configuration=configuration;
     this.javaResourceLocator = javaResourceLocator;
   }
 
@@ -56,7 +58,7 @@ public class CoberturaSensor implements Sensor {
 
   @Override
   public void execute(SensorContext context) {
-    String path = settings.getString(CoberturaPlugin.COBERTURA_REPORT_PATH_PROPERTY);
+    String path=configuration.get(CoberturaPlugin.COBERTURA_REPORT_PATH_PROPERTY).orElse(null);
     File report = pathResolver.relativeFile(fs.baseDir(), path);
     if (!report.isFile() || !report.exists() || !report.canRead()) {
       LOGGER.warn("Cobertura report not found at {}", report);

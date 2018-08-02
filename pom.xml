@@ -10,13 +10,13 @@
   </parent>
 
   <artifactId>sonar-cobertura-plugin</artifactId>
-  <version>TRUNK-SNAPSHOT</version>
+  <version>2.0</version>
   <packaging>sonar-plugin</packaging>
 
   <name>SonarQube Cobertura Plugin</name>
   <description>Code coverage analysis using Cobertura</description>
-  <url>http://redirect.sonarsource.com/plugins/cobertura.html</url>
-  <inceptionYear>2013</inceptionYear>
+  <url>https://github.com/galexandre/sonar-cobertura</url>
+  <inceptionYear>2018</inceptionYear>
   <organization>
     <name>SonarSource</name>
     <url>http://www.sonarsource.com</url>
@@ -30,21 +30,21 @@
   </licenses>
 
   <scm>
-    <connection>scm:git:git@github.com:SonarQubeCommunity/sonar-cobertura.git</connection>
-    <developerConnection>scm:git:git@github.com:SonarQubeCommunity/sonar-cobertura.git</developerConnection>
-    <url>https://github.com/SonarQubeCommunity/sonar-cobertura</url>
+    <connection>scm:git:git@github.com:galexandre/sonar-cobertura.git</connection>
+    <developerConnection>scm:git:git@github.com:galexandre/sonar-cobertura.git</developerConnection>
+    <url>https://github.com/galexandre/sonar-cobertura/</url>
     <tag>HEAD</tag>
   </scm>
   <issueManagement>
     <system>GitHub Issues</system>
-    <url>https://github.com/SonarQubeCommunity/sonar-cobertura/issues</url>
+    <url>https://github.com/galexandre/sonar-cobertura/issues</url>
   </issueManagement>
 
   <properties>
     <license.title>SonarQube Cobertura Plugin</license.title>
 
-    <sonar.version>6.1</sonar.version>
-    <sonar-java.version>4.2</sonar-java.version>
+    <sonar.version>6.7</sonar.version>
+    <!--<sonar-java.version>5.1.0.13090</sonar-java.version>-->
 
     <maven.test.redirectTestOutputToFile>true</maven.test.redirectTestOutputToFile>
   </properties>
@@ -56,11 +56,17 @@
       <version>${sonar.version}</version>
       <scope>provided</scope>
     </dependency>
-    <dependency>
+    <!--<dependency>
       <groupId>org.sonarsource.java</groupId>
       <artifactId>sonar-java-plugin</artifactId>
       <version>${sonar-java.version}</version>
       <type>sonar-plugin</type>
+      <scope>provided</scope>
+    </dependency>-->
+    <dependency>
+      <groupId>org.sonarsource.java</groupId>
+      <artifactId>sonar-java-plugin</artifactId>
+      <version>5.1.0.13090</version>
       <scope>provided</scope>
     </dependency>
 
@@ -115,7 +121,15 @@
       <version>1.9.5</version>
       <scope>test</scope>
     </dependency>
-    <dependency>
+      <!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
+      <dependency>
+          <groupId>org.mockito</groupId>
+          <artifactId>mockito-core</artifactId>
+          <version>2.13.0</version>
+          <scope>test</scope>
+      </dependency>
+
+      <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
       <version>0.9.30</version>
@@ -142,7 +156,7 @@
           <pluginName>Cobertura</pluginName>
           <pluginClass>org.sonar.plugins.cobertura.CoberturaPlugin</pluginClass>
           <pluginDescription><![CDATA[Get code coverage with <a href="http://cobertura.sourceforge.net/">Cobertura</a>.]]></pluginDescription>
-          <requirePlugins>java:${sonar-java.version}</requirePlugins>
+          <requirePlugins>java:5.1.0.13090</requirePlugins>
         </configuration>
       </plugin>
     </plugins>

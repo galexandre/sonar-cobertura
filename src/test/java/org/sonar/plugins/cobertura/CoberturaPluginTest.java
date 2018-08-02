@@ -1,6 +1,6 @@
 /*
  * SonarQube Cobertura Plugin
- * Copyright (C) 2013-2016 SonarSource SA
+ * Copyright (C) 2018-2016 SonarSource SA
  * mailto:contact AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -19,14 +19,26 @@
  */
 package org.sonar.plugins.cobertura;
 
+import org.junit.Ignore;
 import org.junit.Test;
+import org.sonar.api.Plugin;
+import org.sonar.api.SonarQubeSide;
+import org.sonar.api.SonarRuntime;
+import org.sonar.api.internal.SonarRuntimeImpl;
+import org.sonar.api.utils.Version;
 
 import static org.fest.assertions.Assertions.assertThat;
 
 public class CoberturaPluginTest {
 
-  @Test
-  public void test_getExtensions() {
-    assertThat(new CoberturaPlugin().getExtensions()).hasSize(2);
-  }
+    private static final Version VERSION_6_7 = Version.create(6, 7);
+    private CoberturaPlugin coberturaPlugin = new CoberturaPlugin();
+
+    @Test
+    public void testGetExtensions(){
+        SonarRuntime sonarRuntime = SonarRuntimeImpl.forSonarQube(VERSION_6_7, SonarQubeSide.SERVER);
+        Plugin.Context context = new Plugin.Context(sonarRuntime);
+        coberturaPlugin.define(context);
+        assertThat(context.getExtensions()).hasSize(2);
+    }
 }

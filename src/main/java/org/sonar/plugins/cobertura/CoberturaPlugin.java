@@ -1,6 +1,6 @@
 /*
  * SonarQube Cobertura Plugin
- * Copyright (C) 2013-2016 SonarSource SA
+ * Copyright (C) 2018-2016 SonarSource SA
  * mailto:contact AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -21,29 +21,32 @@ package org.sonar.plugins.cobertura;
 
 import com.google.common.collect.ImmutableList;
 import org.sonar.api.CoreProperties;
-import org.sonar.api.SonarPlugin;
+import org.sonar.api.Plugin;
 import org.sonar.api.config.PropertyDefinition;
 import org.sonar.api.resources.Qualifiers;
 
 import java.util.List;
 
-public final class CoberturaPlugin extends SonarPlugin {
+public final class CoberturaPlugin implements Plugin{
 
   public static final String COBERTURA_REPORT_PATH_PROPERTY = "sonar.cobertura.reportPath";
 
-  @Override
-  public List getExtensions() {
+  public List<Object> getExtensions() {
     return ImmutableList.of(
-        PropertyDefinition.builder(COBERTURA_REPORT_PATH_PROPERTY)
-            .category(CoreProperties.CATEGORY_JAVA)
-            .subCategory("Cobertura")
-            .name("Report path")
-            .description("Path (absolute or relative) to Cobertura xml report file.")
-            .defaultValue("target/site/cobertura/coverage.xml")
-            .onQualifiers(Qualifiers.PROJECT)
-            .build(),
+            PropertyDefinition.builder(COBERTURA_REPORT_PATH_PROPERTY)
+                    .category(CoreProperties.CATEGORY_CODE_COVERAGE)
+                    .subCategory("Cobertura")
+                    .name("Report path")
+                    .description("Path (absolute or relative) to Cobertura xml report file.")
+                    .defaultValue("target/site/cobertura/coverage.xml")
+                    .onQualifiers(Qualifiers.PROJECT)
+                    .build(),
 
-        CoberturaSensor.class);
+            CoberturaSensor.class);
   }
 
+  @Override
+  public void define(Context context) {
+    context.addExtensions(getExtensions());
+  }
 }

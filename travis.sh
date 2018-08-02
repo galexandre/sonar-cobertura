@@ -3,11 +3,13 @@
 set -euo pipefail
 
 function installTravisTools {
-  mkdir ~/.local
-  curl -sSL https://github.com/SonarSource/travis-utils/tarball/v28 | tar zx --strip-components 1 -C ~/.local
+  #mkdir ~/.local
+  curl -sSL https://github.com/SonarSource/travis-utils/tarball/v45 | tar zx --strip-components 1 -C ~/.local
   source ~/.local/bin/install
 }
 
+installTravisTools
+. ~/.local/bin/installMaven35
 case "$TEST" in
 
 ci)
@@ -15,7 +17,7 @@ ci)
   ;;
 
 plugin)
-  installTravisTools
+
 
   mvn package -T2 -Dsource.skip=true -Denforcer.skip=true -Danimal.sniffer.skip=true -Dmaven.test.skip=true
 
