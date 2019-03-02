@@ -17,10 +17,6 @@
   <description>Code coverage analysis using Cobertura</description>
   <url>https://github.com/galexandre/sonar-cobertura</url>
   <inceptionYear>2018</inceptionYear>
-  <organization>
-    <name>SonarSource</name>
-    <url>http://www.sonarsource.com</url>
-  </organization>
   <licenses>
     <license>
       <name>GNU LGPL 3</name>
