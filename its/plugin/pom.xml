@@ -12,7 +12,7 @@
   <artifactId>it-cobertura</artifactId>
   <version>1.0-SNAPSHOT</version>
   <name>Cobertura :: Integration Tests</name>
-  <inceptionYear>2018</inceptionYear>
+  <inceptionYear>2019</inceptionYear>
   <organization>
     <name>SonarSource</name>
     <url>http://www.sonarsource.com</url>
