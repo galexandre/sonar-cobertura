@@ -10,8 +10,7 @@ function installTravisTools {
 
 installTravisTools
 . ~/.local/bin/installMaven35
-echo "Test: $TEST"
-case "$TEST" in
+case "${TEST}" in
 
 ci)
   mvn verify -B -e -V
