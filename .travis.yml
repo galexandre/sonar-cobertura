@@ -6,7 +6,6 @@ before_install:
   - wget https://github.com/sormuras/bach/raw/master/install-jdk.sh
 
 install: true
-script: ./travis.sh
 
 matrix:
   include:
@@ -35,6 +34,8 @@ matrix:
     - env: TEST=plugin SQ_VERSION=7.9.1
       jdk: openjdk11
       install: . ./install-jdk.sh -F 11 -L GPL
+
+script: ./travis.sh
 
 matrix:
   fast_finish: true
