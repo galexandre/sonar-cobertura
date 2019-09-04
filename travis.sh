@@ -1,7 +1,7 @@
 #!/bin/bash
 
 set -euo pipefail
-
+set -u 
 function installTravisTools {
   #mkdir ~/.local
   curl -sSL https://github.com/SonarSource/travis-utils/tarball/v45 | tar zx --strip-components 1 -C ~/.local
@@ -10,7 +10,7 @@ function installTravisTools {
 
 installTravisTools
 . ~/.local/bin/installMaven35
-case "${TEST}" in
+case "$TEST" in
 
 ci)
   mvn verify -B -e -V
