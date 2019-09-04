@@ -35,7 +35,7 @@ matrix:
       jdk: openjdk11
       install: . ./install-jdk.sh -F 11 -L GPL
 
-script: env $TEST env $SQ_VERSION ./travis.sh  
+script: ./travis.sh  
 
 matrix:
   fast_finish: true

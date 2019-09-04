@@ -1,7 +1,7 @@
 #!/bin/bash
 
 set -euo pipefail
-set -u 
+
 function installTravisTools {
   #mkdir ~/.local
   curl -sSL https://github.com/SonarSource/travis-utils/tarball/v45 | tar zx --strip-components 1 -C ~/.local
@@ -31,3 +31,4 @@ plugin)
   ;;
 
 esac
+set +u
