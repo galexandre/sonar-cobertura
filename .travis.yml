@@ -10,7 +10,7 @@ script: ./travis.sh
 
 matrix:
   include:
-    -env: TEST='ci'
+    -env: TEST=ci
     jdk: oraclejdk8
     -env: TEST='plugin' SQ_VERSION='6.7'
     jdk: oraclejdk8
