@@ -6,37 +6,35 @@ before_install:
   - wget https://github.com/sormuras/bach/raw/master/install-jdk.sh
 
 install: true
+script: ./travis.sh
 
-matrix:
-  include:
-    - env: TEST=ci
+env:
+  matrix:
+    - TEST=ci
       jdk: oraclejdk8
-    - env: TEST=plugin SQ_VERSION=6.7
+    - TEST=plugin SQ_VERSION=6.7
       jdk: oraclejdk8
-    - env: TEST=plugin SQ_VERSION=7.0
+    - TEST=plugin SQ_VERSION=7.0
       jdk: oraclejdk8
-    - env: TEST=plugin SQ_VERSION=7.1
+    - TEST=plugin SQ_VERSION=7.1
       jdk: oraclejdk8
-    - env: TEST=plugin SQ_VERSION=7.2.1
+    - TEST=plugin SQ_VERSION=7.2.1
       jdk: oraclejdk8
-    - env: TEST=plugin SQ_VERSION=7.3
+    - TEST=plugin SQ_VERSION=7.3
       jdk: oraclejdk8
-    - env: TEST=plugin SQ_VERSION=7.4
+    - TEST=plugin SQ_VERSION=7.4
       jdk: oraclejdk8
-    - env: TEST=plugin SQ_VERSION=7.5
+    - TEST=plugin SQ_VERSION=7.5
       jdk: oraclejdk8
-    - env: TEST=plugin SQ_VERSION=7.6
+    - TEST=plugin SQ_VERSION=7.6
       jdk: oraclejdk8
-    - env: TEST=plugin SQ_VERSION=7.7
+    - TEST=plugin SQ_VERSION=7.7
       jdk: oraclejdk8
-    - env: TEST=plugin SQ_VERSION=7.8
+    - TEST=plugin SQ_VERSION=7.8
       jdk: oraclejdk8
-    - env: TEST=plugin SQ_VERSION=7.9.1
+    - TEST=plugin SQ_VERSION=7.9.1
       jdk: openjdk11
       install: . ./install-jdk.sh -F 11 -L GPL
-
-script: ./travis.sh $TEST $SQ_VERSION
-
 matrix:
   fast_finish: true
 
