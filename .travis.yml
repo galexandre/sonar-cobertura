@@ -1,6 +1,8 @@
 language: java
 sudo: false
 dist: trusty
+jdk:
+  - oraclejdk8
 
 before_install:
   - wget https://github.com/sormuras/bach/raw/master/install-jdk.sh
@@ -11,30 +13,30 @@ script: ./travis.sh
 env:
   matrix:
     - TEST=ci
-      jdk: oraclejdk8
+      #jdk: oraclejdk8
     - TEST=plugin SQ_VERSION=6.7
-      jdk: oraclejdk8
+      #jdk: oraclejdk8
     - TEST=plugin SQ_VERSION=7.0
-      jdk: oraclejdk8
+      #jdk: oraclejdk8
     - TEST=plugin SQ_VERSION=7.1
-      jdk: oraclejdk8
+      #jdk: oraclejdk8
     - TEST=plugin SQ_VERSION=7.2.1
-      jdk: oraclejdk8
+      #jdk: oraclejdk8
     - TEST=plugin SQ_VERSION=7.3
-      jdk: oraclejdk8
+      #jdk: oraclejdk8
     - TEST=plugin SQ_VERSION=7.4
-      jdk: oraclejdk8
+      #jdk: oraclejdk8
     - TEST=plugin SQ_VERSION=7.5
-      jdk: oraclejdk8
+      #jdk: oraclejdk8
     - TEST=plugin SQ_VERSION=7.6
-      jdk: oraclejdk8
+      #jdk: oraclejdk8
     - TEST=plugin SQ_VERSION=7.7
-      jdk: oraclejdk8
+      #jdk: oraclejdk8
     - TEST=plugin SQ_VERSION=7.8
-      jdk: oraclejdk8
+      #jdk: oraclejdk8
     - TEST=plugin SQ_VERSION=7.9.1
-      jdk: openjdk11
-      install: . ./install-jdk.sh -F 11 -L GPL
+      #jdk: openjdk11
+      #install: . ./install-jdk.sh -F 11 -L GPL
 matrix:
   fast_finish: true
 
