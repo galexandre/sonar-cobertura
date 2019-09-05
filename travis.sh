@@ -10,7 +10,11 @@ function installTravisTools {
 
 installTravisTools
 . ~/.local/bin/installMaven35
-case "$TEST" in
+TEST=$1
+SQ_VERSION=$2
+
+echo "Test: $TEST"
+case $TEST in
 
 ci)
   mvn verify -B -e -V
@@ -31,4 +35,3 @@ plugin)
   ;;
 
 esac
-set +u
