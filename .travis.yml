@@ -3,6 +3,7 @@ sudo: false
 dist: trusty
 jdk:
   - oraclejdk8
+  - openjdk11
 
 before_install:
   - wget https://github.com/sormuras/bach/raw/master/install-jdk.sh
@@ -39,6 +40,9 @@ env:
       #install: . ./install-jdk.sh -F 11 -L GPL
 matrix:
   fast_finish: true
+  exclude:
+    - jdk: oraclejdk8
+      env: TEST=plugin SQ_VERSION=7.9.1
 
 
 before_cache:
