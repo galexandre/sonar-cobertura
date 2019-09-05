@@ -13,9 +13,9 @@ script: ./travis.sh
 
 env:
   matrix:
-    - TEST=ci
+      #- TEST=ci
       #jdk: oraclejdk8
-    - TEST=plugin SQ_VERSION=6.7
+      #- TEST=plugin SQ_VERSION=6.7
       #jdk: oraclejdk8
     - TEST=plugin SQ_VERSION=7.0
       #jdk: oraclejdk8
@@ -40,10 +40,14 @@ env:
       #install: . ./install-jdk.sh -F 11 -L GPL
 matrix:
   fast_finish: true
+  include:
+    - jdk: oraclejdk8
+      env: TEST=ci
+    - jdk: oraclejdk8
+      env: TEST=plugin SQ_VERSION=6.7
   exclude:
     - jdk: oraclejdk8
       env: TEST=plugin SQ_VERSION=7.9.1
-
 
 before_cache:
   # remove all the artifacts that are installed in local repo because of mvn deploy
