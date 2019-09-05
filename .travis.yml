@@ -1,22 +1,37 @@
 language: java
 sudo: false
-
-jdk:
-  - oraclejdk8
+dist: trusty
 
 install: true
 script: ./travis.sh
-env:
-  matrix:
-  - TEST=ci
-  - TEST=plugin SQ_VERSION=6.7
-  - TEST=plugin SQ_VERSION=7.0
-  - TEST=plugin SQ_VERSION=7.1
-  - TEST=plugin SQ_VERSION=7.2
 
 matrix:
   fast_finish: true
-
+  include:
+    - jdk: oraclejdk8
+      env: TEST=ci
+    - jdk: oraclejdk8
+      env: TEST=plugin SQ_VERSION=6.7
+    - jdk: oraclejdk8
+      env: TEST=plugin SQ_VERSION=7.0
+    - jdk: oraclejdk8
+      env: TEST=plugin SQ_VERSION=7.1
+    - jdk: oraclejdk8
+      env: TEST=plugin SQ_VERSION=7.2.1
+    - jdk: oraclejdk8
+      env: TEST=plugin SQ_VERSION=7.3
+    - jdk: oraclejdk8
+      env: TEST=plugin SQ_VERSION=7.4
+    - jdk: oraclejdk8
+      env: TEST=plugin SQ_VERSION=7.5
+    - jdk: oraclejdk8
+      env: TEST=plugin SQ_VERSION=7.6
+    - jdk: oraclejdk8
+      env: TEST=plugin SQ_VERSION=7.7
+    - jdk: oraclejdk8
+      env: TEST=plugin SQ_VERSION=7.8
+    - jdk: openjdk11
+      env: TEST=plugin SQ_VERSION=7.9.1
 
 before_cache:
   # remove all the artifacts that are installed in local repo because of mvn deploy
