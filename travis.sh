@@ -11,7 +11,6 @@ function installTravisTools {
 installTravisTools
 . ~/.local/bin/installMaven35
 
-echo "Test: $TEST"
 case "$TEST" in
 
 ci)
