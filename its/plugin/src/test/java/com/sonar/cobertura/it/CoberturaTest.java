@@ -50,7 +50,7 @@ public class CoberturaTest {
      public static Orchestrator orchestrator = Orchestrator.builderEnv()
             .addPlugin("java")
             .addPlugin(FileLocation.of("../../target/sonar-cobertura-plugin.jar"))
-            .setServerProperty("updateCenterUrl", "http://update.sonarsource.org/update-center.properties")
+            //.setServerProperty("updateCenterUrl", "http://update.sonarsource.org/update-center.properties")
             .build();
 
   @Test
