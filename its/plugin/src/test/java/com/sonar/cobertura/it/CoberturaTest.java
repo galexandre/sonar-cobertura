@@ -20,6 +20,7 @@
 package com.sonar.cobertura.it;
 
 import com.sonar.orchestrator.Orchestrator;
+import com.sonar.orchestrator.config.Configuration
 import com.sonar.orchestrator.build.BuildResult;
 import com.sonar.orchestrator.build.MavenBuild;
 import com.sonar.orchestrator.locator.FileLocation;
