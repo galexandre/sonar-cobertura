@@ -1,6 +1,6 @@
 language: java
 sudo: false
-
+dist: focal
 jdk:
   - oraclejdk8
 
