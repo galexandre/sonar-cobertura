@@ -56,8 +56,8 @@ public class CoberturaTest {
   @Test
   public void shouldReuseCoberturaAndSurefireReports() {
 	  Configuration config = orchestrator.getConfiguration();
-	  System.out.println(config.getStringArray("updateCenterUrl"));
-	  System.out.println(config.getStringArray("orchestrator.updateCenterUrl"));
+	  System.out.println(config.getString("updateCenterUrl"));
+	  System.out.println(config.getString("orchestrator.updateCenterUrl"));
 
 	  //orchestrator.setOrchestratorProperty("orchestrator.updateCenterUrl", "http://update.sonarsource.org/update-center.properties");
       assertTrue(true);
