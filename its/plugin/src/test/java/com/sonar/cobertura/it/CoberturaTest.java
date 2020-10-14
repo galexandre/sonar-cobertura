@@ -29,7 +29,7 @@ import org.junit.ClassRule;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sonar.api.config.Configuration;
+//import org.sonar.api.config.Configuration;
 import org.sonarqube.ws.WsMeasures;
 import org.sonarqube.ws.client.measure.ComponentWsRequest;
 
