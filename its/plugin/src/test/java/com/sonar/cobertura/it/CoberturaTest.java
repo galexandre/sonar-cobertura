@@ -28,6 +28,7 @@ import org.junit.ClassRule;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.sonar.api.config.Configuration;
 import org.sonarqube.ws.WsMeasures;
 import org.sonarqube.ws.client.measure.ComponentWsRequest;
 
@@ -48,11 +49,15 @@ public class CoberturaTest {
      public static Orchestrator orchestrator = Orchestrator.builderEnv()
             .addPlugin("java")
             .addPlugin(FileLocation.of("../../target/sonar-cobertura-plugin.jar"))
-            .setServerProperty("orchestrator.updateCenterUrl", "http://update.sonarsource.org/update-center.properties")
+            .setServerProperty("updateCenterUrl", "http://update.sonarsource.org/update-center.properties")
             .build();
 
   @Test
   public void shouldReuseCoberturaAndSurefireReports() {
+	  Configuration config = orchestrator.getConfiguration();
+	  System.out.println(config.getStringArray("updateCenterUrl"));
+	  System.out.println(config.getStringArray("orchestrator.updateCenterUrl"));
+
 	  //orchestrator.setOrchestratorProperty("orchestrator.updateCenterUrl", "http://update.sonarsource.org/update-center.properties");
       assertTrue(true);
       MavenBuild build = MavenBuild.create(new File("projects/cobertura-example/pom.xml"));
