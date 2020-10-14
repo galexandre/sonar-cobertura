@@ -48,11 +48,12 @@ public class CoberturaTest {
      public static Orchestrator orchestrator = Orchestrator.builderEnv()
             .addPlugin("java")
             .addPlugin(FileLocation.of("../../target/sonar-cobertura-plugin.jar"))
+            .setOrchestratorProperty("orchestrator.updateCenterUrl", "http://update.sonarsource.org/update-center.properties")
             .build();
 
   @Test
   public void shouldReuseCoberturaAndSurefireReports() {
-	  orchestrator.setProperty("orchestrator.updateCenterUrl", "http://update.sonarsource.org/update-center.properties");
+	  //orchestrator.setOrchestratorProperty("orchestrator.updateCenterUrl", "http://update.sonarsource.org/update-center.properties");
       assertTrue(true);
       MavenBuild build = MavenBuild.create(new File("projects/cobertura-example/pom.xml"));
       if (orchestrator.getConfiguration().getPluginVersion("cobertura").isGreaterThanOrEquals("1.6")) {
