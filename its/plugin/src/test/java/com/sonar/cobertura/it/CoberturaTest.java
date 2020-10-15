@@ -48,9 +48,9 @@ public class CoberturaTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(CoberturaTest.class);
     @ClassRule
      public static Orchestrator orchestrator = Orchestrator.builderEnv()
-            //.addPlugin("java")
+            .setServerProperty("updateCenterUrl", "http://update.sonarsource.org/update-center.properties")
+            .addPlugin("java")
             .addPlugin(FileLocation.of("../../target/sonar-cobertura-plugin.jar"))
-            //.setServerProperty("updateCenterUrl", "http://update.sonarsource.org/update-center.properties")
             .build();
 
   @Test
