@@ -39,7 +39,7 @@
   <properties>
     <license.title>SonarQube Cobertura Plugin</license.title>
 
-    <sonar.version>6.7</sonar.version>
+    <sonar.version>7.4</sonar.version>
     <!--<sonar-java.version>5.1.0.13090</sonar-java.version>-->
 
     <maven.test.redirectTestOutputToFile>true</maven.test.redirectTestOutputToFile>
